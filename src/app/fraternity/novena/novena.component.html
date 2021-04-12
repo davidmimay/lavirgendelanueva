@@ -1,0 +1,57 @@
+<button mat-raised-button routerLink="/fraternity">BACK</button>
+<div class="intro">
+    <h1>NOVENA</h1>
+        <p>a la milagrosa Imagen</p>
+    <h2>DE N. SRA. DE LA NUEVA,</h2>
+        <p>que se venera en la</p>
+    <h5>VILLA DE SAN MARTÍN DE VALDEIGLESIAS</h5>
+    <h6>DIÓCESIS DE GETAFE</h6>
+        <p>Compuesta por el Bachiller</p>
+    <h5>DON ANTONIO PARRAS Y NOVES</h5>
+    <h6>PRESBÍTERO</h6>
+        <p>e impresa con licencia de la Autoridad Eclesiástica en 1819</p>
+
+    <h3>ADVERTENCIAS</h3>
+        <p>Es María Santísima (decía S. Bernardo) conducto de todos los beneficios: no concede la Divina Majestad cosa a este mundo sin pasar por la mano de María.</p>
+        <p>Es tan forzosa la gracia en nuestras operaciones, que no serán meritorias si les faltase este don; y siendo el fin de las Novenas el conseguir algún bien o el evitar algún mal, será bien cuando quisiéremos pedir alguna cosa por medio de esta Novena, disponernos para recibir el cuerpo de Jesucristo con una buena confesión. Esta se podrá hacer al principio de esta Novena, al medio o al fin de los nueve días, los que se podrán tomar contínuos o separados.</p>
+        <p>Esta Novena se podrá hacer delante de cualquier estampa de Nuestra Señora de la Nueva, por la dificultad de ir a su ermita; y los que no pudieren en la Iglesia, podrán hacerla en sus casas. Su Divina Majestad nos conceda nuestras peticiones y después nos premie con su gloria. Amén.</p>
+</div>
+
+<h1>⚠️ FALTA HIMNO CON PARTITURA Y SONIDO</h1>
+<h1>⚠️ FALTA PADRE NUESTRO Y AVE MARIA DIALOG</h1>
+<h1>⚠️ FALTA BUTTON FONT + / -</h1>
+<h1>⚠️ FALTA PROXIMA NOVENA: 00/00/0000 quedan 000 días</h1>
+
+<mat-tab-group>
+    <mat-tab [label]="concreta.date" *ngFor="let concreta of concreta">
+        <mat-card class="card" *ngFor="let comun of comun">
+            <h1>DIA {{concreta.title | uppercase}}</h1>
+            <h6>{{comun.instructions}}</h6>
+            <h2>{{comun.comunTitle}}</h2>
+            <p>{{comun.comunText}}</p>
+            <h2>Oración particular del día {{concreta.title | lowercase}}</h2>
+            <h6>{{concreta.subtitle}}</h6>
+            <p>{{concreta.text}}</p>
+            <h6>{{comun.instructions2}}</h6>
+            <button mat-raised-button color="accent">Padre Nuestro</button>
+            <button mat-raised-button color="accent">Ave María</button>
+            <h2>{{comun.padreTitle}}</h2>
+            <p>{{comun.padreText}}</p>
+            <h2>{{comun.salutacionTitle}}</h2>
+            <p>{{comun.salutacionText}}</p>
+            <p>{{comun.salutacionText2}}</p>
+            <p>{{comun.salutacionText3}}</p>
+            <h2>{{comun.oremusTitle}}</h2>
+            <p>{{comun.oremusText}}</p>
+            <h2>{{comun.gozosTitle}}</h2>
+            <p>{{comun.gozosText}}</p>
+            <p>{{comun.gozosQuote}}</p>
+            <p>{{concreta.gozo}}</p>
+            <p>{{comun.gozosQuote}}</p>
+            <button mat-raised-button color="accent">Escuchar</button>
+            <iframe width="100%" src="https://www.youtube.com/embed/OWy0e231eMI" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </mat-card>
+    </mat-tab>
+</mat-tab-group>
+
+<div class="footer"><h5>“O.S.C.S.R.E.” (“Omnia sub correctione Sanctae Romanae Ecclesiae” es decir, “Todo bajo la corrección de la Santa Iglesia Católica y Romana”), forma tipográfica abreviada de la protesta de fe mediante la cual el autor declara públicamente su fe y su sometimiento a la autoridad de la Iglesia Católica.</h5></div>

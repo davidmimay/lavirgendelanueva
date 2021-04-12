@@ -1,0 +1,7 @@
+<h2>small works!</h2>
+<div class="homepage-component">
+      <div class="centered">
+        <button mat-raised-button color="accent" *ngIf="(currentUser$ | async) && !(doesNotHaveSubs$ | async)" (click)="sendToCheckout()">Donate 10€ / month</button>
+        <button mat-raised-button color="accent" *ngIf="doesNotHaveSubs$ | async" (click)="sendToCustomerPortal()">Manage Account</button>
+      </div>
+</div>

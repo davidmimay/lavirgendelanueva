@@ -1,0 +1,38 @@
+<!--
+<h3>Average Rating!</h3> {{ avgRating | async }}
+
+<h3>Reviews</h3>
+<div *ngFor="let prayer of prayers | async">
+
+  {{ prayer.userId }} gave {{ prayer.prayId }} {{ prayer.prayed }} prayers
+
+</div>
+
+<h3>Post your Review</h3>
+<button mat-raised-button>🙏 {{ avgRating | async }}
+  <fieldset class="rating">
+    <ng-container  *ngFor="let num of [5, 4, 3, 2, 1]">
+    -->
+        <!-- full prayer -->
+        <!--
+        <input (click)="prayerHandler(num)" 
+              [id]="'prayer'+num"
+              [value]="num-0.5"
+              name="rating" 
+              type="radio" />
+
+        <label class="full" [for]="'prayer'+num"></label>
+        -->
+        <!-- half prayer -->
+        <!--
+        <input (click)="prayerHandler(num-0.5)" 
+              [value]="num-0.5"
+              [id]="'halfprayer'+num" 
+              name="rating" 
+              type="radio"  />
+
+        <label class="half" [for]="'halfprayer'+num"></label>
+    </ng-container>
+  </fieldset>
+</button>
+-->

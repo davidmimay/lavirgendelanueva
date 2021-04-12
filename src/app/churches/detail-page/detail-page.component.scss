@@ -1,0 +1,28 @@
+:host {
+    text-align: center;
+    padding: 24px;
+}
+mat-card {
+    max-width: 500px;
+    background-color:#212121; 
+    margin: 0 auto 10px;
+    border-radius: 15px;
+    box-shadow: -5px -5px 30px rgb(0, 0, 0, 0.1),
+                5px 5px 30px rgb(0, 0, 0, 0.1), 
+            inset -50px -50px 50px rgba(0, 0, 0, 0.2),
+            inset 50px 50px 50px rgba(0, 0, 0, 0.1) !important
+    // box-shadow: -20px 20px 20px rgba(0, 0, 0, 0.3) !important;
+}
+.light {
+    background: radial-gradient(50% 50% at 50% 50%, rgba(255, 196, 0, 0.2) 0%, rgba(255, 255, 255, 0) 100%);
+    animation: light 5s ease;
+    // mix-blend-mode: color;
+}
+@keyframes light {
+    0% {
+      opacity: 0%;
+    }
+    100% {
+        opacity: 100%;
+    }
+}

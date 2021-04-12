@@ -1,0 +1,46 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // firebase payment with stripe
+    match /stripe_customers/{uid} {
+      allow read, write: if request.auth.uid == uid;
+
+      match /payment_methods/{id} {
+        allow read,write: if request.auth.uid == uid;
+      }
+      match /payments/{id} {
+        allow read, write: if request.auth.uid == uid;
+      }
+    }
+    // firebase stripe subscription extension
+    match /customers/{uid} {
+      allow read: if request.auth.uid == uid;
+
+      match /checkout_sessions/{id} {
+        allow read, write: if request.auth.uid == uid;
+      }
+      match /subscriptions/{id} {
+        allow read: if request.auth.uid == uid;
+      }
+    }
+    match /products/{id} {
+      allow read: if true;
+
+      match /prices/{id} {
+        allow read: if true;
+      }
+
+      match /tax_rates/{id} {
+        allow read: if true;
+      }
+    }
+    // allow authenticated only
+    //match /{document=**} {
+		//	allow read, write: if request.auth != null;
+    //}
+    // cap billing data
+    match /private/{doc} {
+      allow read, write: if false;
+    }
+  }
+}

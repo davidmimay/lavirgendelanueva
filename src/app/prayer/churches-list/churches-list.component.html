@@ -1,0 +1,21 @@
+<div
+  cdkDropList
+  cdkDropListOrientation="horizontal"
+  class="churches"
+  (cdkDropListDropped)="drop($event)"
+>
+  <app-church cdkDrag *ngFor="let church of churches" [church]="church">
+    <mat-icon cdkDragHandle class="handle">drag_indicator</mat-icon>
+  </app-church>
+
+  <div class="church-button">
+    <button
+      mat-raised-button
+      color="accent"
+      cdkDragDisabled
+      (click)="openChurchDialog()"
+    >
+      New Church
+    </button>
+  </div>
+</div>

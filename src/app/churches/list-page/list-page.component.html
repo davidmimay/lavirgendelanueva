@@ -1,0 +1,13 @@
+<h1>⛪️ Churches</h1>
+<div>
+    <type-ahead></type-ahead>
+<mat-nav-list role="list">
+    <h3 mat-subheader>Churches availables</h3>
+    <mat-list-item *ngFor="let chur of data.churches" [routerLink]="chur.id" role="listitem">
+        <mat-icon mat-list-icon>home</mat-icon>
+        <div mat-line>{{ chur.name }}</div>
+        <div mat-line>{{ chur.id }}</div>
+        <div mat-line>{{ chur.bio | slice:0:25 }}...</div>
+    </mat-list-item>
+</mat-nav-list>
+</div>

@@ -1,0 +1,39 @@
+:host {
+    text-align: center;
+    padding: 24px;
+}
+mat-card {
+    max-width: 450px;
+    background-color:#212121; 
+    margin: 0 auto 10px;
+}
+.example-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+  }
+  
+.example-full-width {
+    width: 100%;
+    min-width: 150px;
+    max-width: 500px;
+}
+mat-nav-list {
+    max-width: 600px;
+    background-color:#212121; 
+    padding: 50;
+    margin: 0 auto;
+    border-radius: 4px;
+    text-align: left;
+}
+mat-list-item {
+
+    transition: transform 300ms ease;
+    &:hover {
+        transform: translateY(-3px);
+    }
+    transition: transform 300ms ease;
+}
+mat-tab-group {
+    margin: 0 auto;
+}    

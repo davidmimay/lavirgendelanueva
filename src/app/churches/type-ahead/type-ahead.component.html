@@ -1,0 +1,21 @@
+
+<mat-form-field class="searcher">
+    <mat-label>available churches...</mat-label>
+    <!-- simple way -->
+    <!-- <input matInput (keyup)="onkeyup($event)" class="input" placeholder="search movies...">
+        <ul *ngFor="let church of results | async" class="card">
+        <li>{{ church.name }}</li>
+        </ul>
+    -->
+
+    <input matInput (keyup)="onkeyup($event)" class="input" placeholder="search movies..." [(ngModel)]="search.$event" #search [matAutocomplete]="auto">
+    <button mat-button *ngIf="search.$event" matSuffix mat-icon-button aria-label="Clear" (click)="search.$event=''">
+        <mat-icon>close</mat-icon>
+    </button>
+
+    <mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let chur of results | async" class="card" [routerLink]="chur.id">
+            <p>{{ chur.name }} | {{chur.id}}</p>
+        </mat-option>
+    </mat-autocomplete>
+</mat-form-field>

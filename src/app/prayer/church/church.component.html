@@ -1,0 +1,34 @@
+<mat-card class="outer-card">
+  <mat-card-header>
+    <!-- Slot for the handle -->
+    <ng-content></ng-content>
+    <mat-card-title>
+      {{ church.title }}
+    </mat-card-title>
+    <mat-card-subtitle>
+      {{ church.id }}
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <div
+    class="asks"
+    cdkDropList
+    cdkDropListOrientation="vertical"
+    (cdkDropListDropped)="askDrop($event)"
+  >
+    <div
+      class="inner-card"
+      cdkDrag
+      *ngFor="let ask of church.asks; let i = index"
+      (click)="openDialog(ask, i)"
+    >
+      <mat-card [ngClass]="ask.label"> {{ ask.description }} </mat-card>
+    </div>
+
+    <button mat-stroked-button (click)="openDialog()">
+      <mat-icon>add</mat-icon>
+    </button>
+
+    <app-delete-button (delete)="handleDelete()"></app-delete-button>
+  </div>
+</mat-card>

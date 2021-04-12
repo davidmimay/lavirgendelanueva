@@ -1,0 +1,93 @@
+<mat-tab-group>
+  <mat-tab label="Home">
+    <h1>Membership</h1>
+    <mat-card class="card">
+        <div class="description">
+            <h2>{{product.title}}</h2>
+            <h4>{{product.subTitle}}</h4>
+            <h1>{{product.price | currency}}</h1>
+            <p>{{product.description}}</p>
+            <button mat-raised-button color="accent" (click)="checkout()">Checkout</button>
+        </div>
+    </mat-card>
+
+      <mat-card class="example-card">
+          <mat-card-header>
+            <div mat-card-avatar class="example-header-image"></div>
+            <mat-card-title>Name of the person</mat-card-title>
+            <mat-card-subtitle>member since 0000</mat-card-subtitle>
+          </mat-card-header>
+          <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+          <mat-card-content>
+            <head>
+              <title>Checkout</title>
+              <script src="https://js.stripe.com/v3/"></script>
+            </head>
+            <body>
+              <button id="checkout">Subscribe</button>
+            </body>
+            <p>
+              The Shiba Inu
+            </p>
+            <template id="product">
+              <div class="product">
+                <img src="" alt="" />
+                <h2>name</h2>
+                <p class="description">description</p>
+                <form class="product-form">
+                  <label for="price">Choose pricing plan</label>
+                  <select id="price" name="price"></select>
+                  <button type="submit">Subscribe</button>
+                </form>
+              </div>
+            </template>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-button>ADD/EDIT PAYMENT</button>
+            <button mat-button>INVOICES</button>
+          </mat-card-actions>
+      </mat-card>
+</mat-tab>
+
+  <mat-tab label="Vote"> 
+    <h1>Vote</h1>
+    <form class="example-form">
+      <mat-form-field class="example-full-width">
+        <mat-label>Message</mat-label>
+        <input matInput #message maxlength="256" placeholder="Ex. I need help with...">
+        <mat-hint align="start"><strong>Don't disclose personal info</strong> </mat-hint>
+        <mat-hint align="end">{{message.value.length}} / 256</mat-hint>
+      </mat-form-field>
+    </form>
+    <mat-nav-list role="list">
+      <h3 mat-subheader>Proposals availables</h3>
+      <mat-list-item role="listitem">
+          <mat-icon mat-list-icon>account_box</mat-icon>
+          <div mat-line> we want to do this thing </div>
+          <button mat-button>00 👍</button>
+          <button mat-button>00 👎</button>
+      </mat-list-item>
+    </mat-nav-list>  
+  </mat-tab>
+
+  <mat-tab label="Cabildo"> 
+    <h1>Vote</h1>
+    <form class="example-form">
+      <mat-form-field class="example-full-width">
+        <mat-label>Message</mat-label>
+        <input matInput #message maxlength="256" placeholder="Ex. I need help with...">
+        <mat-hint align="start"><strong>Don't disclose personal info</strong> </mat-hint>
+        <mat-hint align="end">{{message.value.length}} / 256</mat-hint>
+      </mat-form-field>
+    </form>
+    <mat-nav-list role="list">
+      <h3 mat-subheader>Proposals availables</h3>
+      <mat-list-item role="listitem">
+          <mat-icon mat-list-icon>account_box</mat-icon>
+          <div mat-line> we want to do this thing </div>
+          <button mat-button>00 👍</button>
+          <button mat-button>00 👎</button>
+      </mat-list-item>
+    </mat-nav-list>  
+  </mat-tab>
+</mat-tab-group>

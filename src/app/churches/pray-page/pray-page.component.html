@@ -1,0 +1,30 @@
+<h1>🕯 Prays</h1>
+
+<mat-nav-list role="list">
+    <h3 mat-subheader>asked this month...</h3>
+
+    <!--<mat-list-item *ngFor="let pray of praysObservable | async; let prayId of pray.id" [routerLink]="['church','church.id','pray.id']" role="listitem">-->
+
+    <mat-list-item *ngFor="let pray of praysObservable | async" [routerLink]="pray.id" role="listitem">
+        <mat-icon mat-list-icon>
+          <div class="fire">
+              <div class="fire-main">
+                <div class="main-fire"></div>
+                <div class="particle-fire"></div>
+              </div>
+              <div class="fire-bottom">
+                <div class="main-fire"></div>
+              </div>
+          </div>
+        </mat-icon>
+        <p mat-line>{{ pray.ask }}</p>
+        <h6 mat-line>
+            <div>churchId | {{ pray.churchId }}</div> 
+            <div>userId | {{ pray.userId }}</div>
+            <div>prayId | {{ pray.id }}</div>
+            <!-- <div>prayDate | {{ pray.date | date:'MMM d' }}</div> -->
+
+           <!-- <app-prayer-button></app-prayer-button>-->
+        </h6>
+    </mat-list-item>
+</mat-nav-list>

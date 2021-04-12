@@ -1,0 +1,39 @@
+curl \
+  --request POST \
+  --data 'fakeData={
+    "budgetDisplayName": "localTest",
+    "alertThresholdExceeded": 1.0,
+    "costAmount": 20010.01,
+    "costIntervalStart": "2021-02-20T00:00:00Z",
+    "budgetAmount": 100.00,
+    "budgetAmountType": "SPECIFIED_AMOUNT",
+    "currencyCode": "USD"
+}' \
+http://localhost:5001/mimay1/europe-west2/fakePubSub
+
+
+curl \
+  --request POST \
+  --data 'fakeData={
+    "budgetDisplayName": "localTest",
+    "alertThresholdExceeded": 1.0,
+    "costAmount": 0.2,
+    "costIntervalStart": "2021-02-11T00:00:00Z",
+    "budgetAmount": 100.00,
+    "budgetAmountType": "SPECIFIED_AMOUNT",
+    "currencyCode": "USD"
+}' \
+http://localhost:5001/mimay1/europe-west2/fakePubSub
+
+curl \
+  --request POST \
+  --data 'fakeData={
+    "budgetDisplayName": "localTest",
+    "alertThresholdExceeded": 1.0,
+    "costAmount": 0.6,
+    "costIntervalStart": "2020-04-03T00:00:00Z",
+    "budgetAmount": 100.00,
+    "budgetAmountType": "SPECIFIED_AMOUNT",
+    "currencyCode": "USD"
+}' \
+http://localhost:5001/mimay1/europe-west2/fakePubSub

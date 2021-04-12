@@ -1,0 +1,19 @@
+<h1>Church</h1>
+
+<div class="light">
+  <!-- <mat-card *ngIf="church | async as church" [routerLink]="[church.id]"> -->
+  <mat-card *ngIf="church | async as church" [routerLink]="[church.id]">
+    <mat-card-header>
+      <mat-card-title>{{ church.name }}</mat-card-title>
+      <mat-card-subtitle>Church ID | {{ church.id }}</mat-card-subtitle>
+    </mat-card-header>
+    <img mat-card-image [src]="church.image" />
+    <mat-card-content>
+      <p>Bio | {{ church.bio }}</p>
+    </mat-card-content>
+
+    <app-pray></app-pray>
+
+  </mat-card>
+</div>
+<app-pray-page></app-pray-page>
