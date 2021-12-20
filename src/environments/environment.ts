@@ -14,15 +14,14 @@ export const environment = {
     testKey: 'rk_test_51DwFfWLQT86JpABovTPM2Y8QzWoLjRDyvJfslVKEeH3fYzX6WxM30r2EFyVkTuII941jh79QoHlahK1SoHilEq6k00OWnYrXTB'
   },
   location: 'europe-west2',
-  firebase:  {
-    apiKey: 'AIzaSyDherIKIIiOpM5MkIF_T_EQBWFy9BHhbS4',
-    authDomain: 'mimay1.firebaseapp.com',
-    databaseURL: 'https://mimay1.firebaseio.com',
-    projectId: 'mimay1',
-    storageBucket: 'mimay1.appspot.com',
-    messagingSenderId: '528823231751',
-    appId: '1:528823231751:web:5e12e4f488304894f8d1a2',
-    measurementId: 'G-2CVBNV4BDL'
+  firebaseConfig: {
+    apiKey: "AIzaSyD5hKm243tSIC0d4Pkgp_UzBNihhwH-rs0",
+    authDomain: "lavirgendelanueva.firebaseapp.com",
+    projectId: "lavirgendelanueva",
+    storageBucket: "lavirgendelanueva.appspot.com",
+    messagingSenderId: "1075844485732",
+    appId: "1:1075844485732:web:e4d8630b36c099c2708571",
+    measurementId: "G-K3EY9ZJ40V"
   }
 };
 

@@ -1,5 +1,5 @@
 {
-  "name": "firestarter",
+  "name": "lavirgendelanueva",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -14,11 +14,11 @@
     "compile:server_bak": "webpack --config webpack.server.config.js --progress --colors",
     "build:ssr_bak": "npm run build:client-and-server-bundles && npm run compile:server",
     "serve:ssr_bak": "node dist/server",
-    "build:client-and-server-bundles_bak": "ng build --prod && ng run firestarter:server:production",
-    "dev:ssr": "ng run firestarter:serve-ssr",
+    "build:client-and-server-bundles_bak": "ng build --prod && ng run lavirgendelanueva:server:production",
+    "dev:ssr": "ng run lavirgendelanueva:serve-ssr",
     "serve:ssr": "node dist/server/main.js",
-    "build:ssr": "ng build --prod && ng run firestarter:server:production",
-    "prerender": "ng run firestarter:prerender"
+    "build:ssr": "ng build --prod && ng run lavirgendelanueva:server:production",
+    "prerender": "ng run lavirgendelanueva:prerender"
   },
   "private": true,
   "dependencies": {

@@ -21,7 +21,7 @@ export class SubscriptionComponent implements OnInit {
   /**** NEW TYPESCRIPT ****/
   STRIPE_PUBLISHABLE_KEY = (environment.stripe_key);
   taxRates = (environment.stripe_tax);
-  firebaseConfig = (environment.firebase);
+  firebaseConfig = (environment.firebaseConfig);
   functionLocation = (environment.location);
   
   

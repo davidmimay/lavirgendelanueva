@@ -31,7 +31,7 @@ export class SmallComponent implements OnInit {
 
   STRIPE_PUBLISHABLE_KEY = (environment.stripe_key);
   taxRates = (environment.stripe_tax);
-  firebaseConfig = (environment.firebase);
+  firebaseConfig = (environment.firebaseConfig);
   functionLocation = (environment.location);
   stripe_subs_price = (environment.stripe_subs_price);
   webapp_url = (environment.webapp_url);
