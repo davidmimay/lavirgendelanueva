@@ -1,0 +1,56 @@
+.sidenav-container {
+  height: 100vh;
+}
+
+.navbar {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.brand {
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  user-select: none;
+  margin-left: 8px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.nav-links {
+  display: flex;
+  gap: 4px;
+
+  a {
+    font-weight: 500;
+  }
+
+  a.active {
+    background-color: rgba(255, 255, 255, 0.18);
+  }
+}
+
+.menu-button {
+  display: none; // Oculto en desktop
+}
+
+.sidenav {
+  width: 260px;
+}
+
+// ===== Responsive =====
+@media (max-width: 768px) {
+  .nav-links {
+    display: none; // Ocultamos enlaces en móvil
+  }
+
+  .menu-button {
+    display: inline-flex; // Mostramos hamburguesa
+  }
+
+  .brand {
+    font-size: 1.2rem;
+  }
+}
