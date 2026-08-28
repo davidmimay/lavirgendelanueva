@@ -16,7 +16,7 @@ export const environment = {
   location: 'europe-west2',
   firebaseConfig: {
     apiKey: "AIzaSyD5hKm243tSIC0d4Pkgp_UzBNihhwH-rs0",
-    authDomain: "lavirgendelanueva.firebaseapp.com",
+    authDomain: "virgendelanueva.es",
     projectId: "lavirgendelanueva",
     storageBucket: "lavirgendelanueva.appspot.com",
     messagingSenderId: "1075844485732",
