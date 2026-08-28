@@ -1,4 +1,4 @@
-# More info http://help.github.com/ignore-files/ 
+# More info http://help.github.com/ignore-files/
 
 /.firebase
 /.vscode
@@ -9,8 +9,6 @@
 *.log
 /.firebase
 /e2e
-environment.prod.ts
-environment.ts
 
 # Others
 /tmp

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import { loadStripe } from '@stripe/stripe-js';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.development';
 
 @Component({
   selector: 'app-member',
@@ -12,7 +12,7 @@ import { environment } from '../../../environments/environment';
 export class MemberComponent /*implements OnInit*/ {
 
   /*ngOnInit() {}*/
-  
+
   title = 'angular-stripe';
     priceId = 'price_1HtuDiLQT86JpABoTu5tRGgZ';
     product = {

@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase                              from 'firebase/app';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.development';
 import { Observable } from 'rxjs';
 import {loadStripe} from '@stripe/stripe-js';
 // *** OTHER ***
@@ -35,7 +35,7 @@ export class SmallComponent implements OnInit {
   functionLocation = (environment.location);
   stripe_subs_price = (environment.stripe_subs_price);
   webapp_url = (environment.webapp_url);
-  
+
   readonly currentUser$ = this.afAuth.authState.pipe(filter(objectExists));
 
   readonly doesNotHaveSubs$: Observable<boolean> = this.currentUser$.pipe(

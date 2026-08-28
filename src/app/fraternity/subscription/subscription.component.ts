@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import * as firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.development';
 import { loadStripe } from '@stripe/stripe-js';
 
 
@@ -17,25 +17,25 @@ export class SubscriptionComponent implements OnInit {
     private afAuth: AngularFireAuth,
     private db: AngularFirestore,
   ) {}
-  
+
   /**** NEW TYPESCRIPT ****/
   STRIPE_PUBLISHABLE_KEY = (environment.stripe_key);
   taxRates = (environment.stripe_tax);
   firebaseConfig = (environment.firebaseConfig);
   functionLocation = (environment.location);
-  
-  
+
+
   ngOnInit() {  /*
     // **** Data listeners *****
     // get your products
-    
+
     async function startDataListeners() { // function startDataListeners() {
       const products = document.querySelector('.products');
       const template = document.querySelector('#product');
       this.db.collection('products').where('active', '==', true)
       // this.db.collection('products', ref => ref.where('active', '==', true))
       .get()
-      
+
       .then(function (querySnapshot) {
         querySnapshot.forEach(async function (doc) {
           const priceSnap = await doc.ref.collection('prices').orderBy('unit_amount').get();
@@ -78,7 +78,7 @@ export class SubscriptionComponent implements OnInit {
           products.appendChild(container);
         });
       });
-      
+
       .then(function (querySnapshot) {
         querySnapshot.forEach(async function (doc) {
           console.log(doc.id, ' => ', doc.data());
@@ -88,7 +88,7 @@ export class SubscriptionComponent implements OnInit {
           });
         });
       });
-      
+
       // Get all subscriptions for the customer
       const user = await this.afAuth.auth.currentUser;
       this.db.collection('customers')
@@ -115,16 +115,16 @@ export class SubscriptionComponent implements OnInit {
             priceData.interval
           }, giving you the role: ${await getCustomClaimRole()}. 🥳`;
         });
-        
-    } 
 
-    
+    }
+
+
     // ***** Event listeners ******
     // Signout button
-    
+
     document.getElementById('signout')
     .addEventListener('click', () => firebase.auth().signOut());
-    
+
     // Checkout handler
     async function subscribe(event) {
       event.preventDefault();
@@ -162,7 +162,7 @@ export class SubscriptionComponent implements OnInit {
         }
       });
     }
-    
+
     // Billing portal handler
     document.querySelector('#billing-portal-button')
       .addEventListener('click', async (event) => {
@@ -176,7 +176,7 @@ export class SubscriptionComponent implements OnInit {
         window.location.assign(data.url);
         console.log('billing portal button works!')
       });
-    
+
     // Get custom claim role helper
     async function getCustomClaimRole() {
       await firebase.auth().currentUser.getIdToken(true);

@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 //payment method
 import { loadStripe } from '@stripe/stripe-js';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.development';
 
 @Component({
   selector: 'app-pray-dialog',
@@ -16,13 +16,13 @@ import { environment } from '../../../environments/environment';
       </mat-form-field>
     </div>
 
-    <!-- new -->    
+    <!-- new -->
     <div class="container mt-5">
       <h2>Stripe Checkout</h2>
       <div class="row mt-5">
         <div class="col-md-4">
           <button (click)="pay(20)" class="btn btn-primary btn-block">Pay $20</button>
-        </div>  
+        </div>
       </div>
       <p class="mt-5">
           Try it out using the test card number <b>4242 4242 4242 4242</b>, a random three-digit CVC number, any expiration date in the future, and a random five-digit U.S. ZIP code.
@@ -33,7 +33,7 @@ import { environment } from '../../../environments/environment';
     <div mat-dialog-actions>
       <button mat-button (click)="onNoClick()">Cancel</button>
       <button mat-button color="accent" cdkFocusInitial (click)="checkout()">Light</button>
-      
+
       <!--
       <button mat-button [mat-dialog-close]="data.ask" cdkFocusInitial>
         Create
@@ -81,7 +81,7 @@ export class PrayDialogComponent {
   }
   /****** payment method >> https://w3path.com/angular-8-integrate-stripe-payment-gateway/ ***********/
   loadStripe() {
-     
+
     if(!window.document.getElementById('stripe-script')) {
       var s = window.document.createElement("script");
       s.id = "stripe-script";
@@ -93,7 +93,7 @@ export class PrayDialogComponent {
   ngOnInit() {
     this.loadStripe();
   }
-  pay(amount) {    
+  pay(amount) {
     var handler = (<any>window).StripeCheckout.configure({
       key: environment.stripe_key,
       locale: 'auto',
@@ -104,13 +104,13 @@ export class PrayDialogComponent {
         alert('Token Created!!');
       }
     });
- 
+
     handler.open({
       name: 'Demo Site',
       description: '2 widgets',
       amount: amount * 100
     });
- 
+
   }
 }
 
@@ -157,7 +157,7 @@ export class PrayDialogComponent {
       );
     }
   }, []);
-  
+
   /******************/
 
 }

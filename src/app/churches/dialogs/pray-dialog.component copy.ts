@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 //payment method
 import { loadStripe } from '@stripe/stripe-js';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.development';
 
 @Component({
   selector: 'app-pray-dialog',
@@ -43,8 +43,8 @@ export class PrayDialogComponent {
   onNoClick(): void {
     this.dialogRef.close();
   }
-  
-  
+
+
   /******************/
   // payment method 2
   const ProductDisplay = ({ handleClick }) => (
