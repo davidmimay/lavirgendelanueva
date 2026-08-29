@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { ThemeToggle } from '../theme-toggle/theme-toggle';
 
 @Component({
   selector: 'app-navbar',
@@ -16,7 +17,8 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     MatSidenavModule,
     MatListModule,
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
+    ThemeToggle
   ],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss'

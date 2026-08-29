@@ -1,0 +1,13 @@
+// You can add global styles to this file, and also import other style files
+// Tipografía global
+html, body {
+  font-family: 'Montserrat', sans-serif;
+  margin: 0;
+  height: 100%;
+}
+
+// Ejemplo de uso de la fuente de títulos
+h1, h2, h3, .brand {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+}

@@ -6,30 +6,46 @@
 @use '@angular/material' as mat;
 
 html {
+  // Light theme (default)
   height: 100%;
   @include mat.theme(
     (
       color: (
+        theme-type: light,
         primary: mat.$magenta-palette,
         tertiary: mat.$violet-palette,
       ),
-      typography: Roboto,
+      typography: Montserrat,
       density: 0,
     )
   );
+}
+
+// Dark theme
+html.dark-theme {
+  @include mat.theme((
+    color: (
+      theme-type: dark,
+      primary: mat.$magenta-palette,
+      tertiary: mat.$violet-palette,
+    ),
+    typography: Montserrat,
+    density: 0,
+  ));
 }
 
 body {
   // Default the application to a light color theme. This can be changed to
   // `dark` to enable the dark color theme, or to `light dark` to defer to the
   // user's system settings.
-  color-scheme: light;
+  // color-scheme: light;
 
   // Set a default background, font and text colors for the application using
   // Angular Material's system-level CSS variables. Learn more about these
   // variables at https://material.angular.dev/guide/system-variables
   background-color: var(--mat-sys-surface);
   color: var(--mat-sys-on-surface);
+  transition: background-color 0.3s ease, color 0.3s ease;
   font: var(--mat-sys-body-medium);
 
   // Reset the user agent margin.
