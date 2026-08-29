@@ -1,0 +1,40 @@
+.footer {
+  margin-top: auto;           // push footer down
+  padding: 24px 16px;
+  text-align: center;
+  border-top: 1px solid var(--mat-sys-outline-variant);
+  background-color: var(--mat-sys-surface-container);
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.made-by {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: var(--mat-sys-on-surface-variant);
+  font-weight: 400;
+}
+
+.heart {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  color: #e91e63;
+}
+
+.author {
+  color: var(--mat-sys-primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+  }
+}

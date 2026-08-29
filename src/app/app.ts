@@ -1,9 +1,14 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Navbar } from './shared/navbar/navbar';
+import { Footer } from './shared/footer/footer';
 
 @Component({
-  imports: [RouterOutlet, Navbar],
+  imports: [
+    RouterOutlet,
+    Navbar,
+    Footer
+  ],
   selector: 'app-root',
   standalone: true,
   styleUrl: './app.scss',
