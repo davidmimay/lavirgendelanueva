@@ -1,4 +1,4 @@
-import { Injectable, signal, effect } from '@angular/core';
+import { Injectable, signal, effect, computed } from '@angular/core';
 
 export type ThemeMode = 'light' | 'dark';
 
@@ -6,13 +6,11 @@ export type ThemeMode = 'light' | 'dark';
   providedIn: 'root'
 })
 export class ThemeService {
-  // Usamos signal (Angular 22)
   private readonly theme = signal<ThemeMode>(this.getInitialTheme());
 
-  readonly isDark = this.theme.asReadonly();
+  readonly isDark = computed(() => this.theme() === 'dark');
 
   constructor() {
-    // Aplica el tema cada vez que cambia
     effect(() => {
       const mode = this.theme();
       document.documentElement.classList.toggle('dark-theme', mode === 'dark');
@@ -28,7 +26,6 @@ export class ThemeService {
     const saved = localStorage.getItem('theme') as ThemeMode | null;
     if (saved) return saved;
 
-    // Respeta la preferencia del sistema
     return window.matchMedia('(prefers-color-scheme: dark)').matches
       ? 'dark'
       : 'light';
