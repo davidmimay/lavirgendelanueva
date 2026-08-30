@@ -8,6 +8,11 @@
          (click)="closeSidenav()">
         Inicio
       </a>
+      <a mat-list-item routerLink="/museo" routerLinkActive="active"
+         [routerLinkActiveOptions]="{ exact: true }"
+         (click)="closeSidenav()">
+        Museo
+      </a>
       <!-- Aquí irán más enlaces -->
       <app-theme-toggle />
     </mat-nav-list>
@@ -32,6 +37,10 @@
         <a mat-button routerLink="/" routerLinkActive="active"
            [routerLinkActiveOptions]="{ exact: true }">
           Inicio
+        </a>
+        <a mat-button routerLink="/museo" routerLinkActive="active"
+           [routerLinkActiveOptions]="{ exact: true }">
+          Museo
         </a>
         <!-- Aquí irán más enlaces -->
       </nav>
