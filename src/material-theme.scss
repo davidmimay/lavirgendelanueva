@@ -1,27 +1,30 @@
-// Include theming for Angular Material with `mat.theme()`.
-// This Sass mixin will define CSS variables that are used for styling Angular Material
-// components according to the Material 3 design spec.
-// Learn more about theming and how to use it for your application's
-// custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
 
 html {
-  // Light theme (default)
   height: 100%;
-  @include mat.theme(
-    (
-      color: (
-        theme-type: light,
-        primary: mat.$magenta-palette,
-        tertiary: mat.$violet-palette,
-      ),
-      typography: Montserrat,
-      density: 0,
-    )
-  );
+
+  // 1. Aplicación del Tema Claro
+  @include mat.theme((
+    color: (
+      theme-type: light,
+      primary: mat.$magenta-palette,
+      tertiary: mat.$violet-palette,
+    ),
+    typography: Montserrat,
+    density: 0,
+  ));
+
+  // 2. Personalización de la escala tipográfica con 'rem'
+  // Sobrescribimos las variables de sistema que genera Angular Material
+  --mat-sys-headline-large: 700 4rem/4rem Playfair Display, sans-serif !important; // h1
+  --mat-sys-headline-medium: 600 3.5rem/3.5rem Playfair Display, sans-serif !important; // h2
+  --mat-sys-headline-small: 500 3rem/3rem Playfair Display, sans-serif !important; // h3
+  --mat-sys-title-large: 400 2.5rem/2.5rem Montserrat, sans-serif !important; // h4
+  --mat-sys-title-medium: 300 2rem/2rem Montserrat, sans-serif !important; // h5
+  --mat-sys-title-small: 200 1rem/1rem Montserrat, sans-serif !important; // h6
 }
 
-// Dark theme
+// Tema oscuro
 html.dark-theme {
   @include mat.theme((
     color: (
@@ -34,21 +37,19 @@ html.dark-theme {
   ));
 }
 
-body {
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
-  // color-scheme: light;
+// 3. Mapeo explícito a las etiquetas HTML
+h1 { font: var(--mat-sys-headline-large); margin: 0 0 1rem 0; }
+h2 { font: var(--mat-sys-headline-medium); margin: 0 0 0.875rem 0; }
+h3 { font: var(--mat-sys-headline-small); margin: 0 0 0.75rem 0; }
+h4 { font: var(--mat-sys-title-large); margin: 0 0 0.5rem 0; }
+h5 { font: var(--mat-sys-title-medium); margin: 0 0 0.5rem 0; }
+h6 { font: var(--mat-sys-title-small); margin: 0 0 0.5rem 0; }
 
-  // Set a default background, font and text colors for the application using
-  // Angular Material's system-level CSS variables. Learn more about these
-  // variables at https://material.angular.dev/guide/system-variables
+body {
   background-color: var(--mat-sys-surface);
   color: var(--mat-sys-on-surface);
   transition: background-color 0.3s ease, color 0.3s ease;
   font: var(--mat-sys-body-medium);
-
-  // Reset the user agent margin.
   margin: 0;
   height: 100%;
 }
