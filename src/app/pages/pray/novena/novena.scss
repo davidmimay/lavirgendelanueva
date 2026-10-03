@@ -1,0 +1,40 @@
+/*
+.novena-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+*/
+
+mat-card {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+
+mat-card-content {
+    font-size: 1.1rem;
+    line-height: 1.7rem;
+}
+/*
+.dias-section {
+  h2 {
+    margin-bottom: 1rem;
+  }
+}
+
+.dia-card {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  background-color: var(--mat-sys-surface-container-low);
+  
+  .consideracion-texto {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    white-space: pre-line;
+  }
+}
+*/

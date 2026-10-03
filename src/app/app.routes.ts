@@ -1,7 +1,4 @@
 import { Routes } from '@angular/router';
-import { Landing } from './pages/landing/landing';
-import { Museum } from './pages/museum/museum';
-import { Pray } from './pages/pray/pray';
 
 export const routes: Routes = [
   {
@@ -14,7 +11,16 @@ export const routes: Routes = [
   },
   {
     path: 'oraciones',
-    loadComponent: () => import('./pages/pray/pray').then(m => m.Pray)
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./pages/pray/pray').then(m => m.Pray)
+      },
+      {
+        path: 'novena',
+        loadComponent: () => import('./pages/pray/novena/novena').then(m => m.Novena)
+      }
+    ]
   },
   { path: '**', redirectTo: '' },
 ];

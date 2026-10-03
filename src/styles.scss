@@ -19,3 +19,21 @@ h1, h2, h3, .brand {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15) !important;
   }
 }
+
+.material-symbols-outlined,
+mat-icon.material-symbols-outlined,
+.mat-icon {
+  font-family: 'Material Symbols Outlined' !important;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 1.5rem;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
