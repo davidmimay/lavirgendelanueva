@@ -42,4 +42,8 @@ export class Novena {
       }
     });
   }
+
+  // Text Personalization
+  fontSize = signal(1);
+  lineHeight = signal(1.6);
 }

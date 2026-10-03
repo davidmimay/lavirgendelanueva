@@ -1,142 +1,148 @@
 <header style="color: var(--mat-sys-primary)">
   <h1>{{ novena().novenaTitle }}</h1>
 </header>
-    
-<button mat-card-avatar matIconButton color="primary" (click)="openDialog(novena().warningTitle, novena().warningContent)"><mat-icon>info</mat-icon></button>
 
-  <!-- Pestañas para los 9 Días de la Novena -->
-  <section class="dias-section">
+<!-- Pestañas para los 9 Días de la Novena -->
+<section class="responsive" [style.--font-size.rem]="fontSize()" [style.--line-height]="lineHeight()">
+  <!-- Barra de botones simple -->
+    <div>
+      <button mat-card-avatar matIconButton color="primary" (click)="openDialog(novena().warningTitle, novena().warningContent)"><mat-icon>info</mat-icon></button>
+      <button mat-icon-button (click)="fontSize.update(v => v - 0.1)"><mat-icon>text_decrease</mat-icon></button>
+      <button mat-icon-button (click)="fontSize.update(v => v + 0.1)"><mat-icon>text_increase</mat-icon></button>
+      <button mat-icon-button (click)="lineHeight.update(v => v - 0.1)"><mat-icon>format_line_spacing</mat-icon></button>
+      <button mat-icon-button (click)="lineHeight.update(v => v + 0.1)"><mat-icon>format_line_spacing</mat-icon></button>
+    </div>
 
-    <mat-tab-group [selectedIndex]="diaSeleccionado() - 1" (selectedIndexChange)="seleccionarDia($event + 1)">
-      @for (diaItem of novena().day; track diaItem.title; let i = $index) {
-        <mat-tab [label]="'Día ' + (i + 1)">
-          <div class="tab-content">
+  <mat-tab-group [selectedIndex]="diaSeleccionado() - 1" (selectedIndexChange)="seleccionarDia($event + 1)">
+    @for (diaItem of novena().day; track diaItem.title; let i = $index) {
+      <mat-tab [label]="'Día ' + (i + 1)">
+        <div class="tab-content">
 
-            <!-- Instrucciones iniciales -->
-             <!--
-            <mat-card appearance="outlined" class="section-card instructions-card">
-              <mat-card-header>
-                <button mat-card-avatar matIconButton color="primary" (click)="openDialog(novena().warningTitle, novena().warningContent)"><mat-icon>info</mat-icon></button>
-                <mat-card-title>{{ novena().warningTitle }}</mat-card-title>
-              </mat-card-header>
-              <mat-card-content>
-                <mat-expansion-panel appearance="flat" class="advertencias-panel">
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>{{ novena().warningTitle }}</mat-panel-title>
-                  </mat-expansion-panel-header>
-                  <p>{{ novena().warningContent }}</p>
-                </mat-expansion-panel>
-              </mat-card-content>
-            </mat-card>
-            -->
+          <!-- Instrucciones iniciales -->
+            <!--
+          <mat-card appearance="outlined" class="section-card instructions-card">
+            <mat-card-header>
+              <button mat-card-avatar matIconButton color="primary" (click)="openDialog(novena().warningTitle, novena().warningContent)"><mat-icon>info</mat-icon></button>
+              <mat-card-title>{{ novena().warningTitle }}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <mat-expansion-panel appearance="flat" class="advertencias-panel">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>{{ novena().warningTitle }}</mat-panel-title>
+                </mat-expansion-panel-header>
+                <p>{{ novena().warningContent }}</p>
+              </mat-expansion-panel>
+            </mat-card-content>
+          </mat-card>
+          -->
 
-            <p class="instruction-text">{{ novena().noteStart }}</p>
+          <p class="instruction-text">{{ novena().noteStart }}</p>
 
-            <!-- Oración Común Inicial -->
-            <mat-card appearance="outlined">
-              <mat-card-header>
-                <mat-icon mat-card-avatar color="primary">menu_book</mat-icon>
-                <mat-card-title>{{ novena().comunTitle }}</mat-card-title>
-              </mat-card-header>
-              <mat-card-content>
-                <p class="prayer-text">{{ novena().comunText }}</p>
-              </mat-card-content>
-            </mat-card>
-            
-            <!-- Oracion Concreta -->
-            <mat-card appearance="raised">
-              <mat-card-header>
-                <div mat-card-avatar>{{ diaItem.date }}</div>
-                <mat-card-title>{{ diaItem.title }}</mat-card-title>
-                <mat-card-subtitle>{{ diaItem.subtitle }}</mat-card-subtitle>
-              </mat-card-header>
+          <!-- Oración Común Inicial -->
+          <mat-card appearance="outlined">
+            <mat-card-header>
+              <mat-icon mat-card-avatar color="primary">menu_book</mat-icon>
+              <mat-card-title>{{ novena().comunTitle }}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <p class="prayer-text">{{ novena().comunText }}</p>
+            </mat-card-content>
+          </mat-card>
+          
+          <!-- Oracion Concreta -->
+          <mat-card appearance="raised">
+            <mat-card-header>
+              <div mat-card-avatar>{{ diaItem.date }}</div>
+              <mat-card-title>{{ diaItem.title }}</mat-card-title>
+              <mat-card-subtitle>{{ diaItem.subtitle }}</mat-card-subtitle>
+            </mat-card-header>
 
-              <mat-card-content>           
-                <p class="prayer-text">{{ diaItem.text }}</p>
-              </mat-card-content>
-            </mat-card>
-            
-            <p class="instruction-text mt-1">{{ novena().notePetition }}</p>
+            <mat-card-content>           
+              <p class="prayer-text">{{ diaItem.text }}</p>
+            </mat-card-content>
+          </mat-card>
+          
+          <p class="instruction-text mt-1">{{ novena().notePetition }}</p>
 
-            <mat-expansion-panel appearance="flat" class="advertencias-panel">
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>{{ novena().ourFatherTitle }}</mat-panel-title>
-                  </mat-expansion-panel-header>
-                  <p>{{ novena().ourFatherContent }}</p>
-                </mat-expansion-panel>
-                <mat-expansion-panel appearance="flat" class="advertencias-panel">
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>{{ novena().hailMaryTitle }}</mat-panel-title>
-                  </mat-expansion-panel-header>
-                  <p>{{ novena().hailMaryContent }}</p>
-                </mat-expansion-panel>
+          <mat-expansion-panel appearance="flat">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>{{ novena().ourFatherTitle }}</mat-panel-title>
+                </mat-expansion-panel-header>
+                <p>{{ novena().ourFatherContent }}</p>
+              </mat-expansion-panel>
+              <mat-expansion-panel appearance="flat">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>{{ novena().hailMaryTitle }}</mat-panel-title>
+                </mat-expansion-panel-header>
+                <p>{{ novena().hailMaryContent }}</p>
+              </mat-expansion-panel>
 
-            <!-- Oración al Eterno Padre -->
-            <mat-card appearance="outlined" class="section-card">
-              <mat-card-header>
-                <mat-icon mat-card-avatar color="primary">auto_awesome</mat-icon>
-                <mat-card-title>{{ novena().padreTitle }}</mat-card-title>
-              </mat-card-header>
-              <mat-card-content>
-                <p class="prayer-text">{{ novena().padreText }}</p>
-              </mat-card-content>
-            </mat-card>
+          <!-- Oración al Eterno Padre -->
+          <mat-card appearance="outlined" class="section-card">
+            <mat-card-header>
+              <mat-icon mat-card-avatar color="primary">auto_awesome</mat-icon>
+              <mat-card-title>{{ novena().padreTitle }}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <p class="prayer-text">{{ novena().padreText }}</p>
+            </mat-card-content>
+          </mat-card>
 
-            <!-- Salutación a María Santísima -->
-            <mat-card appearance="outlined" class="section-card">
-              <mat-card-header>
-                <mat-icon mat-card-avatar color="primary">volunteer_activism</mat-icon>
-                <mat-card-title>{{ novena().salutacionTitle }}</mat-card-title>
-              </mat-card-header>
-              <mat-card-content>
-                <p class="prayer-text">{{ novena().salutacionText }}</p>
-                <div class="versiculo-response">
-                  <p><strong>V.</strong> {{ novena().salutacionText2 }}</p>
-                  <p><strong>R.</strong> {{ novena().salutacionText3 }}</p>
-                </div>
-              </mat-card-content>
-            </mat-card>
+          <!-- Salutación a María Santísima -->
+          <mat-card appearance="outlined" class="section-card">
+            <mat-card-header>
+              <mat-icon mat-card-avatar color="primary">volunteer_activism</mat-icon>
+              <mat-card-title>{{ novena().salutacionTitle }}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <p class="prayer-text">{{ novena().salutacionText }}</p>
+              <div class="versiculo-response">
+                <p><strong>V.</strong> {{ novena().salutacionText2 }}</p>
+                <p><strong>R.</strong> {{ novena().salutacionText3 }}</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
 
-            <!-- Oremus -->
-            <mat-card appearance="outlined" class="section-card">
-              <mat-card-header>
-                <mat-icon mat-card-avatar color="primary">folded_hands</mat-icon>
-                <mat-card-title>{{ novena().oremusTitle }}</mat-card-title>
-              </mat-card-header>
-              <mat-card-content>
-                <p class="prayer-text latin-text">{{ novena().oremusText }}</p>
-              </mat-card-content>
-            </mat-card>
+          <!-- Oremus -->
+          <mat-card appearance="outlined" class="section-card">
+            <mat-card-header>
+              <mat-icon mat-card-avatar color="primary">folded_hands</mat-icon>
+              <mat-card-title>{{ novena().oremusTitle }}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <p class="prayer-text latin-text">{{ novena().oremusText }}</p>
+            </mat-card-content>
+          </mat-card>
 
-            <!-- Gozo del Día -->
-            <mat-card appearance="raised" class="gozo-card">
-              <mat-card-header>
-                <mat-icon mat-card-avatar color="primary">music_note</mat-icon>
-                <mat-card-title>Gozo del Día</mat-card-title>
-              </mat-card-header>
-              <mat-card-content>
-                <p class="gozo-text">{{ diaItem.gozo }}</p>
-              </mat-card-content>
-            </mat-card>
+          <!-- Gozo del Día -->
+          <mat-card appearance="raised" class="gozo-card">
+            <mat-card-header>
+              <mat-icon mat-card-avatar color="primary">music_note</mat-icon>
+              <mat-card-title>Gozo del Día</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <p class="gozo-text">{{ diaItem.gozo }}</p>
+            </mat-card-content>
+          </mat-card>
 
-             <!-- Gozos Generales y Respuesta -->
-            <mat-card appearance="outlined" class="section-card gozos-generales-card">
-              <mat-card-header>
-                <mat-icon mat-card-avatar color="tertiary">music_note_2</mat-icon>
-                <mat-card-title>{{ novena().gozosTitle }}</mat-card-title>
-              </mat-card-header>
-              <mat-card-content>
-                <p class="gozo-text"><em>{{ novena().gozosText }}</em></p>
-                <blockquote class="gozo-quote">
-                  <strong>Respuesta:</strong> {{ novena().gozosQuote }}
-                </blockquote>
-              </mat-card-content>
-            </mat-card>
+            <!-- Gozos Generales y Respuesta -->
+          <mat-card appearance="outlined" class="section-card gozos-generales-card">
+            <mat-card-header>
+              <mat-icon mat-card-avatar color="tertiary">music_note_2</mat-icon>
+              <mat-card-title>{{ novena().gozosTitle }}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <p class="gozo-text"><em>{{ novena().gozosText }}</em></p>
+              <blockquote class="gozo-quote">
+                <strong>Respuesta:</strong> {{ novena().gozosQuote }}
+              </blockquote>
+            </mat-card-content>
+          </mat-card>
 
-          </div>
-        </mat-tab>
-      }
-    </mat-tab-group>
+        </div>
+      </mat-tab>
+    }
+  </mat-tab-group>
 
-    <h6></h6>
-  </section>
+  <h6></h6>
+</section>
