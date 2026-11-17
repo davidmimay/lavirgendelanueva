@@ -1,6 +1,6 @@
 <mat-sidenav-container class="sidenav-container">
 
-  <!-- Menú lateral (móvil) -->
+  <!-- Side menu (mobile) -->
   <mat-sidenav #sidenav mode="over" position="start" class="sidenav">
     <mat-nav-list>
       <a mat-list-item routerLink="/" routerLinkActive="active"
@@ -13,20 +13,39 @@
          (click)="closeSidenav()">
         Museo
       </a>
+      <a mat-list-item routerLink="/virgen" routerLinkActive="active"
+         [routerLinkActiveOptions]="{ exact: true }"
+         (click)="closeSidenav()">
+        Virgen
+      </a>
+      <a mat-list-item routerLink="/hermandad" routerLinkActive="active"
+         [routerLinkActiveOptions]="{ exact: true }"
+         (click)="closeSidenav()">
+        Hermandad
+      </a>
+      <a mat-list-item routerLink="/velario" routerLinkActive="active"
+         [routerLinkActiveOptions]="{ exact: true }"
+         (click)="closeSidenav()">
+        Velario
+      </a>
       <a mat-list-item routerLink="/oraciones" routerLinkActive="active"
          [routerLinkActiveOptions]="{ exact: true }"
          (click)="closeSidenav()">
         Oraciones
       </a>
-      <!-- Aquí irán más enlaces -->
+      <a mat-list-item routerLink="/romeria" routerLinkActive="active"
+         [routerLinkActiveOptions]="{ exact: true }"
+         (click)="closeSidenav()">
+        Romería
+      </a>
       <app-theme-toggle />
     </mat-nav-list>
   </mat-sidenav>
 
-  <!-- Contenido principal -->
+  <!-- Content -->
   <mat-sidenav-content>
     <mat-toolbar color="primary" class="navbar">
-      <!-- Botón hamburguesa (solo móvil) -->
+      <!-- Button (mobile)-->
       <button mat-icon-button class="menu-button" (click)="sidenav.toggle()">
         <mat-icon>menu</mat-icon>
       </button>
@@ -37,7 +56,7 @@
 
       <span class="spacer"></span>
 
-      <!-- Enlaces desktop -->
+      <!-- Links (desktop) -->
       <nav class="nav-links">
         <a mat-button routerLink="/" routerLinkActive="active"
            [routerLinkActiveOptions]="{ exact: true }">
@@ -47,17 +66,32 @@
            [routerLinkActiveOptions]="{ exact: true }">
           Museo
         </a>
-        <a mat-button routerLink="/novena" routerLinkActive="active"
+        <a mat-button routerLink="/virgen" routerLinkActive="active"
            [routerLinkActiveOptions]="{ exact: true }">
-          Novena
+          Virgen
         </a>
-        <!-- Aquí irán más enlaces -->
+        <a mat-button routerLink="/hermandad" routerLinkActive="active"
+           [routerLinkActiveOptions]="{ exact: true }">
+          Hermandad
+        </a>
+        <a mat-button routerLink="/velario" routerLinkActive="active"
+           [routerLinkActiveOptions]="{ exact: true }">
+          Velario
+        </a>
+        <a mat-button routerLink="/oraciones" routerLinkActive="active"
+           [routerLinkActiveOptions]="{ exact: true }">
+          Oraciones
+        </a>
+        <a mat-button routerLink="/romeria" routerLinkActive="active"
+           [routerLinkActiveOptions]="{ exact: true }">
+          Romeria
+        </a>
       </nav>
       <app-theme-toggle />
     </mat-toolbar>
 
-    <!-- Aquí se proyectará el resto de la app -->
     <ng-content></ng-content>
+
   </mat-sidenav-content>
 
 </mat-sidenav-container>

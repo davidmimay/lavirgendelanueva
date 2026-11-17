@@ -2,9 +2,9 @@
   <h1>{{ novena().novenaTitle }}</h1>
 </header>
 
-<!-- Pestañas para los 9 Días de la Novena -->
+<!-- Tabs Novena -->
 <section class="responsive" [style.--font-size.rem]="fontSize()" [style.--line-height]="lineHeight()">
-  <!-- Barra de botones simple -->
+  <!-- Bar buttons -->
     <div>
       <button mat-card-avatar matIconButton color="primary" (click)="openDialog(novena().warningTitle, novena().warningContent)"><mat-icon>info</mat-icon></button>
       <button mat-icon-button (click)="fontSize.update(v => v - 0.1)"><mat-icon>text_decrease</mat-icon></button>
@@ -17,24 +17,6 @@
     @for (diaItem of novena().day; track diaItem.title; let i = $index) {
       <mat-tab [label]="'Día ' + (i + 1)">
         <div class="tab-content">
-
-          <!-- Instrucciones iniciales -->
-            <!--
-          <mat-card appearance="outlined" class="section-card instructions-card">
-            <mat-card-header>
-              <button mat-card-avatar matIconButton color="primary" (click)="openDialog(novena().warningTitle, novena().warningContent)"><mat-icon>info</mat-icon></button>
-              <mat-card-title>{{ novena().warningTitle }}</mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-              <mat-expansion-panel appearance="flat" class="advertencias-panel">
-                <mat-expansion-panel-header>
-                  <mat-panel-title>{{ novena().warningTitle }}</mat-panel-title>
-                </mat-expansion-panel-header>
-                <p>{{ novena().warningContent }}</p>
-              </mat-expansion-panel>
-            </mat-card-content>
-          </mat-card>
-          -->
 
           <p class="instruction-text">{{ novena().noteStart }}</p>
 
@@ -52,7 +34,7 @@
           <!-- Oracion Concreta -->
           <mat-card appearance="raised">
             <mat-card-header>
-              <div mat-card-avatar>{{ diaItem.date }}</div>
+              <mat-icon mat-card-avatar color="primary">today</mat-icon>
               <mat-card-title>{{ diaItem.title }}</mat-card-title>
               <mat-card-subtitle>{{ diaItem.subtitle }}</mat-card-subtitle>
             </mat-card-header>
@@ -125,7 +107,7 @@
             </mat-card-content>
           </mat-card>
 
-            <!-- Gozos Generales y Respuesta -->
+          <!-- Gozos Generales y Respuesta -->
           <mat-card appearance="outlined" class="section-card gozos-generales-card">
             <mat-card-header>
               <mat-icon mat-card-avatar color="tertiary">music_note_2</mat-icon>
