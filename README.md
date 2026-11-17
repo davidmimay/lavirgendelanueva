@@ -61,3 +61,5 @@ For more information on using the Angular CLI, including detailed command refere
 ## Dev
 
 $ npm start
+
+## Material symbols & icons
