@@ -1,1 +1,73 @@
-<h1>Museo</h1>
+<div class="museum-container">
+  
+  <!-- Cabecera de la página -->
+  <header class="museum-header">
+    <div class="header-title">
+      <mat-icon color="primary">museum</mat-icon>
+      <div>
+        <h1>Museo y Patrimonio</h1>
+        <p class="subtitle">Colección histórica, artística y documental conservada a lo largo de los siglos.</p>
+      </div>
+    </div>
+
+    <!-- Tarjeta rápida de horarios / visita -->
+    <mat-card appearance="outlined" class="visit-info-card">
+      <mat-card-content>
+        <div class="info-item">
+          <mat-icon>schedule</mat-icon>
+          <span><strong>Horarios:</strong> Cita previa</span>
+        </div>
+        <div class="info-item">
+          <mat-icon>location_on</mat-icon>
+          <span><strong>Ubicación:</strong> Calle tentetieso, San Martín de Valdeiglesias 28680, Madrid, España.</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </header>
+
+  <mat-divider></mat-divider>
+
+  <!-- Filtros por Sala / Categoría -->
+  <nav class="filter-bar" aria-label="Filtrar piezas por categoría">
+    <mat-chip-listbox [value]="selectedCategory()" (change)="selectCategory($event.value || 'Todas')">
+      @for (cat of categories; track cat) {
+        <mat-chip-option [value]="cat">{{ cat }}</mat-chip-option>
+      }
+    </mat-chip-listbox>
+  </nav>
+
+  <!-- Cuadrícula de piezas del museo -->
+  <section class="pieces-grid">
+    @for (piece of filteredPieces(); track piece.id) {
+      <mat-card appearance="outlined" class="piece-card">
+        <div class="image-wrapper">
+          <img mat-card-image [src]="piece.imageUrl" [alt]="piece.title" loading="lazy" />
+          <span class="year-badge">{{ piece.year }}</span>
+        </div>
+
+        <mat-card-header>
+          <mat-card-title>{{ piece.title }}</mat-card-title>
+          <mat-card-subtitle>{{ piece.subtitle }}</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <p class="piece-description">{{ piece.description }}</p>
+        </mat-card-content>
+
+        <mat-card-actions align="end">
+          <span class="category-tag">{{ piece.category }}</span>
+          <button mat-button color="primary">
+            <mat-icon>visibility</mat-icon>
+            Ver ficha
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    } @empty {
+      <div class="empty-state">
+        <mat-icon>search_off</mat-icon>
+        <p>No hay piezas registradas en esta categoría actualmente.</p>
+      </div>
+    }
+  </section>
+
+</div>
