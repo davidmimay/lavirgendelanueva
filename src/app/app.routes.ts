@@ -10,6 +10,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/museum/museum').then(m => m.Museum)
   },
   {
+    path: 'virgen',
+    loadComponent: () => import('./pages/virgin/virgin').then(m => m.Virgin)
+  },
+  {
     path: 'oraciones',
     children: [
       {
