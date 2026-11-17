@@ -1,0 +1,127 @@
+<div class="virgen-container">
+
+  <!-- 1. Cabecera y Cuenta Atrás al 8 de Septiembre -->
+  <section class="hero-section">
+    <div class="hero-title">
+      <mat-icon color="primary">church</mat-icon>
+      <div>
+        <h1>Nuestra Señora de la Nueva</h1>
+        <p class="subtitle">Patrona y alcaldesa perpetua • Festividad: 8 de Septiembre</p>
+      </div>
+    </div>
+
+    <mat-card appearance="outlined" class="countdown-card">
+      <mat-card-content>
+        @if (countdown().isToday) {
+          <div class="celebration-banner">
+            <mat-icon>celebration</mat-icon>
+            <span>¡Hoy es 8 de Septiembre! Día Grande de la Patrona</span>
+          </div>
+        } @else {
+          <p class="countdown-label">
+            <mat-icon>event</mat-icon>
+            Faltan para el {{ targetDate().getFullYear() }}:
+          </p>
+          <div class="countdown-grid">
+            <div class="time-box">
+              <span class="number">{{ countdown().days }}</span>
+              <span class="unit">Días</span>
+            </div>
+            <div class="time-box">
+              <span class="number">{{ countdown().hours }}</span>
+              <span class="unit">Horas</span>
+            </div>
+            <div class="time-box">
+              <span class="number">{{ countdown().minutes }}</span>
+              <span class="unit">Min</span>
+            </div>
+            <div class="time-box">
+              <span class="number">{{ countdown().seconds }}</span>
+              <span class="unit">Seg</span>
+            </div>
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+  </section>
+
+  <!-- 2. Visor 3D Interactivo + Historia -->
+  <section class="main-grid">
+    
+    <!-- Tarjeta del Modelo 3D -->
+    <mat-card appearance="outlined" class="model-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar color="primary">3d_rotation</mat-icon>
+        <mat-card-title>Vista Interactiva 3D</mat-card-title>
+        <mat-card-subtitle>Arrastra para girar o pellizca para acercar</mat-card-subtitle>
+      </mat-card-header>
+
+      <div class="viewer-wrapper">
+        <model-viewer 
+          src="assets/models/virgen.glb" 
+          alt="Modelo 3D de la Virgen de la Nueva"
+          auto-rotate 
+          camera-controls 
+          shadow-intensity="1"
+          touch-action="pan-y">
+        </model-viewer>
+      </div>
+    </mat-card>
+
+    <!-- Tarjeta de Historia y Devoción -->
+    <mat-card appearance="outlined" class="history-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar color="primary">history_edu</mat-icon>
+        <mat-card-title>Historia y Tradición</mat-card-title>
+        <mat-card-subtitle>Orígenes de la advocación</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content class="history-text">
+        <p>
+          La devoción a <strong>Nuestra Señora de la Nueva</strong> hunde sus raíces en la historia centenaria de la comarca. Según la tradición transmitida de generación en generación, su hallazgo y posterior veneración marcaron el devenir espiritual y cultural del pueblo.
+        </p>
+        <p>
+          A lo largo de los siglos, la imagen ha presidido los momentos más significativos de la comunidad, siendo custodiada en su ermita y trasladada en solemne romería y procesión cada mes de septiembre.
+        </p>
+        <p>
+          Cada <strong>8 de septiembre</strong>, coincidiendo con la festividad de la Natividad de la Virgen María, vecinos y devotos acompañan a la Patrona por las calles engalanadas en una jornada llena de fe, música y tradición.
+        </p>
+      </mat-card-content>
+    </mat-card>
+
+  </section>
+
+  <!-- 3. Mapa del Recorrido de la Procesión -->
+  <section class="map-section">
+    <mat-card appearance="outlined" class="map-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar color="primary">route</mat-icon>
+        <mat-card-title>Itinerario de la Procesión</mat-card-title>
+        <mat-card-subtitle>Recorrido oficial del 8 de septiembre • Salida desde la Parroquia</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content class="map-content">
+        <div class="iframe-container">
+          <iframe 
+            [src]="mapUrl" 
+            width="100%" 
+            height="400" 
+            style="border:0;" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Mapa del recorrido de la procesión">
+          </iframe>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions align="end">
+        <a mat-button color="primary" href="https://maps.google.com" target="_blank" rel="noopener">
+          <mat-icon>open_in_new</mat-icon>
+          Abrir recorrido en Google Maps
+        </a>
+      </mat-card-actions>
+    </mat-card>
+  </section>
+
+</div>
