@@ -2,7 +2,7 @@ name: Deploy to Firebase Hosting on push
 on:
   push:
     branches:
-      - main
+      - angular-22-clean
 
 env:
   ACTIONS_NODE_OPTION_WARNINGS: suppress
