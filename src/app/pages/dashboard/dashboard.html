@@ -1,0 +1,169 @@
+<div class="dashboard-container">
+
+  <!-- Cabecera de bienvenida -->
+  <header class="dashboard-header">
+    <div class="welcome-title">
+      <mat-icon color="primary">diversity_3</mat-icon>
+      <div>
+        <h1>Portal del Hermano</h1>
+        <p class="subtitle">Bienvenido, {{ member().name }} • Área privada de la Hermandad</p>
+      </div>
+    </div>
+
+    <button mat-stroked-button color="primary">
+      <mat-icon>badge</mat-icon>
+      Descargar Carnet Digital
+    </button>
+  </header>
+
+  <!-- Cuadrícula principal del Dashboard -->
+  <div class="dashboard-grid">
+
+    <!-- COLUMNA IZQUIERDA: Perfil del Hermano -->
+    <aside class="profile-column">
+      <mat-card appearance="outlined" class="profile-card">
+        <mat-card-header>
+          <div mat-card-avatar class="avatar-circle">
+            <mat-icon>person</mat-icon>
+          </div>
+          <mat-card-title>{{ member().name }}</mat-card-title>
+          <mat-card-subtitle>{{ member().role }}</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content class="profile-details">
+          <div class="badge-row">
+            <div class="stat-pill">
+              <span class="label">Nº Hermano</span>
+              <span class="value">#{{ member().memberNumber }}</span>
+            </div>
+            <div class="stat-pill">
+              <span class="label">Antigüedad</span>
+              <span class="value">Desde {{ member().sinceYear }}</span>
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <ul class="info-list">
+            <li>
+              <mat-icon>verified</mat-icon>
+              <span>Cuota anual: <strong>{{ member().feeStatus }}</strong></span>
+            </li>
+            <li>
+              <mat-icon>mail</mat-icon>
+              <span>{{ member().email }}</span>
+            </li>
+          </ul>
+        </mat-card-content>
+
+        <mat-card-actions align="end">
+          <button mat-button color="primary">
+            <mat-icon>edit</mat-icon>
+            Actualizar datos
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </aside>
+
+    <!-- COLUMNA DERECHA: Votaciones y Noticias -->
+    <main class="content-column">
+
+      <!-- SECCIÓN 1: Votaciones Activas -->
+      <section class="dashboard-section">
+        <div class="section-heading">
+          <mat-icon color="primary">how_to_vote</mat-icon>
+          <h2>Votaciones y Consultas</h2>
+        </div>
+
+        <div class="cards-stack">
+          @for (poll of polls(); track poll.id) {
+            <mat-card appearance="outlined" class="poll-card">
+              <mat-card-header>
+                <mat-card-title>{{ poll.title }}</mat-card-title>
+                <mat-card-subtitle>
+                  Cierre: {{ poll.closingDate }} • {{ getTotalVotes(poll) }} votos emitidos
+                </mat-card-subtitle>
+              </mat-card-header>
+
+              <mat-card-content class="poll-body">
+                <p class="poll-desc">{{ poll.description }}</p>
+
+                @if (!poll.hasVoted) {
+                  <!-- Formulario de votación -->
+                  <mat-radio-group [(ngModel)]="poll.selectedOptionId" class="options-group">
+                    @for (opt of poll.options; track opt.id) {
+                      <mat-radio-button [value]="opt.id" color="primary">
+                        {{ opt.label }}
+                      </mat-radio-button>
+                    }
+                  </mat-radio-group>
+                } @else {
+                  <!-- Resultados tras votar -->
+                  <div class="results-list">
+                    @for (opt of poll.options; track opt.id) {
+                      @let pct = getPercentage(opt.votes, getTotalVotes(poll));
+                      <div class="result-item" [class.user-choice]="opt.id === poll.selectedOptionId">
+                        <div class="result-header">
+                          <span>
+                            {{ opt.label }}
+                            @if (opt.id === poll.selectedOptionId) {
+                              <mat-icon class="voted-check" title="Tu voto">check_circle</mat-icon>
+                            }
+                          </span>
+                          <strong>{{ pct }}% ({{ opt.votes }})</strong>
+                        </div>
+                        <mat-progress-bar mode="determinate" [value]="pct"></mat-progress-bar>
+                      </div>
+                    }
+                  </div>
+                }
+              </mat-card-content>
+
+              @if (!poll.hasVoted) {
+                <mat-card-actions align="end">
+                  <button 
+                    mat-flat-button 
+                    color="primary" 
+                    [disabled]="!poll.selectedOptionId"
+                    (click)="submitVote(poll.id)">
+                    <mat-icon>send</mat-icon>
+                    Emitir voto
+                  </button>
+                </mat-card-actions>
+              }
+            </mat-card>
+          }
+        </div>
+      </section>
+
+      <!-- SECCIÓN 2: Noticias y Circulares -->
+      <section class="dashboard-section">
+        <div class="section-heading">
+          <mat-icon color="primary">campaign</mat-icon>
+          <h2>Noticias y Circulares Internas</h2>
+        </div>
+
+        <div class="cards-stack">
+          @for (item of news(); track item.id) {
+            <mat-card appearance="outlined" class="news-card">
+              <mat-card-header>
+                <mat-card-title>{{ item.title }}</mat-card-title>
+                <mat-card-subtitle>{{ item.date }}</mat-card-subtitle>
+              </mat-card-header>
+
+              <mat-card-content>
+                <p class="news-summary">{{ item.summary }}</p>
+              </mat-card-content>
+
+              <mat-card-actions align="end">
+                <span class="news-tag">{{ item.tag }}</span>
+                <button mat-button color="primary">Leer circular</button>
+              </mat-card-actions>
+            </mat-card>
+          }
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
