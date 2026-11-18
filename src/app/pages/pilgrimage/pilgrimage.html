@@ -1,0 +1,198 @@
+<div class="romeria-container">
+
+  <!-- 1. Cabecera y Cuenta Atrás hasta Lunes de Pascua -->
+  <section class="hero-section">
+    <div class="hero-title">
+      <mat-icon color="primary">hiking</mat-icon>
+      <div>
+        <h1>Romería al Pantano de San Juan</h1>
+        <p class="subtitle">Peregrinación tradicional a la Ermita • Cada Lunes de Pascua</p>
+      </div>
+    </div>
+
+    <mat-card appearance="outlined" class="countdown-card">
+      <mat-card-content>
+        @if (countdown().isToday) {
+          <div class="celebration-banner">
+            <mat-icon>celebration</mat-icon>
+            <span>¡Hoy es Lunes de Pascua! Día de Romería en el Pantano</span>
+          </div>
+        } @else {
+          <p class="countdown-label">
+            <mat-icon>event_available</mat-icon>
+            Lunes de Pascua ({{ nextEasterMonday().toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) }}):
+          </p>
+          <div class="countdown-grid">
+            <div class="time-box">
+              <span class="number">{{ countdown().days }}</span>
+              <span class="unit">Días</span>
+            </div>
+            <div class="time-box">
+              <span class="number">{{ countdown().hours }}</span>
+              <span class="unit">Horas</span>
+            </div>
+            <div class="time-box">
+              <span class="number">{{ countdown().minutes }}</span>
+              <span class="unit">Min</span>
+            </div>
+            <div class="time-box">
+              <span class="number">{{ countdown().seconds }}</span>
+              <span class="unit">Seg</span>
+            </div>
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+  </section>
+
+  <!-- 2. Historia de la Ermita y de la Peregrinación -->
+  <section class="history-grid">
+    
+    <mat-card appearance="outlined" class="info-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar color="primary">chapel</mat-icon>
+        <mat-card-title>La Ermita del Pantano de San Juan</mat-card-title>
+        <mat-card-subtitle>Un santuario junto a las aguas del Alberche</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content class="card-text">
+        <p>
+          La primitiva ermita medieval de <strong>Nuestra Señora de la Nueva</strong> se alzaba en la vega del río Alberche, junto al histórico puente de San Juan. Con la construcción del embalse en la década de 1950, el antiguo enclave quedó cubierto por las aguas.
+        </p>
+        <p>
+          Para preservar el culto y la memoria de sus antepasados, los vecinos alzaron la <strong>actual ermita en lo alto de la ladera</strong>, rodeada de pinares y con vistas al pantano, trasladando allí la venerada imagen y conservando su espíritu de refugio espiritual.
+        </p>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card appearance="outlined" class="info-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar color="primary">directions_walk</mat-icon>
+        <mat-card-title>Historia de la Peregrinación</mat-card-title>
+        <mat-card-subtitle>Tradición centenaria del Lunes de Pascua</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content class="card-text">
+        <p>
+          Cada <strong>Lunes de Pascua</strong>, al alba, romeros, familias y caballistas emprenden el camino desde el casco urbano de San Martín de Valdeiglesias hacia el Pantano de San Juan acompañando a la Virgen entre cánticos, dulzainas y jotas tradicionales.
+        </p>
+        <p>
+          A la llegada a la explanada de la ermita se celebra la <strong>Misa Mayor de campaña</strong> y la tradicional subasta de banzos y ofrendas, compartiendo después una jornada de fraternidad en el pinar antes del regreso vespertino.
+        </p>
+      </mat-card-content>
+    </mat-card>
+
+  </section>
+
+  <!-- 3. Mapa de la Romería -->
+  <section class="map-section">
+    <mat-card appearance="outlined" class="map-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar color="primary">map</mat-icon>
+        <mat-card-title>Camino de la Romería y Ubicación de la Ermita</mat-card-title>
+        <mat-card-subtitle>Entorno del Embalse de San Juan • San Martín de Valdeiglesias</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content class="map-content">
+        <div class="iframe-container">
+          <iframe 
+            [src]="mapUrl" 
+            width="100%" 
+            height="360" 
+            style="border:0;" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Mapa de la Ermita en el Pantano de San Juan">
+          </iframe>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions align="end">
+        <a mat-button color="primary" href="https://maps.google.com/?q=Ermita+Virgen+de+la+Nueva+San+Martin+de+Valdeiglesias" target="_blank" rel="noopener">
+          <mat-icon>directions</mat-icon>
+          Cómo llegar en Google Maps
+        </a>
+      </mat-card-actions>
+    </mat-card>
+  </section>
+
+  <mat-divider></mat-divider>
+
+  <!-- 4. Apartado de Ofrendas Florales -->
+  <section class="offerings-section">
+    <div class="section-header">
+      <div class="title-row">
+        <mat-icon color="primary">local_florist</mat-icon>
+        <div>
+          <h2>Ofrendas Florales a la Virgen</h2>
+          <p class="subtitle">
+            Encarga tu ramo o centro floral: <strong>la Hermandad lo adquirirá y lo depositará en el altar</strong> en tu nombre el día de la Romería.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulario rápido si el usuario ha pulsado "Encargar ofrenda" -->
+    @if (selectedOffering(); as item) {
+      <mat-card appearance="outlined" class="order-drawer-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar color="primary">volunteer_activism</mat-icon>
+          <mat-card-title>Encargar: {{ item.name }} ({{ item.price }} €)</mat-card-title>
+          <mat-card-subtitle>Personaliza la tarjeta o cinta que acompañará tus flores en el altar</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content class="order-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Nombre del oferente o familia</mat-label>
+            <input matInput [ngModel]="donorName()" (ngModelChange)="donorName.set($event)" placeholder="Ej. Familia López" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Dedicatoria para la cinta (opcional)</mat-label>
+            <input matInput [ngModel]="ribbonDedication()" (ngModelChange)="ribbonDedication.set($event)" placeholder="Ej. Con todo nuestro amor y devoción" maxlength="80" />
+          </mat-form-field>
+        </mat-card-content>
+
+        <mat-card-actions align="end">
+          <button mat-button (click)="cancelOrder()">Cancelar</button>
+          <button mat-flat-button color="primary" [disabled]="!donorName().trim()" (click)="confirmOrder()">
+            <mat-icon>shopping_bag</mat-icon>
+            Confirmar ofrenda ({{ item.price }} €)
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    }
+
+    <!-- Cuadrícula de productos florales -->
+    <div class="offerings-grid">
+      @for (flower of offerings(); track flower.id) {
+        <mat-card appearance="outlined" class="flower-card">
+          <div class="image-wrapper">
+            <img mat-card-image [src]="flower.imageUrl" [alt]="flower.name" loading="lazy" />
+            @if (flower.tag) {
+              <span class="flower-badge">{{ flower.tag }}</span>
+            }
+          </div>
+
+          <mat-card-header>
+            <mat-card-title>{{ flower.name }}</mat-card-title>
+            <mat-card-subtitle class="price-text">{{ flower.price }} €</mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+            <p class="flower-desc">{{ flower.description }}</p>
+          </mat-card-content>
+
+          <mat-card-actions align="end">
+            <button mat-flat-button color="primary" (click)="selectForOrder(flower)">
+              <mat-icon>add_shopping_cart</mat-icon>
+              Ofrendar
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      }
+    </div>
+  </section>
+
+</div>
