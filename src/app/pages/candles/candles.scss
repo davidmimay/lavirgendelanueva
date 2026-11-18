@@ -1,0 +1,241 @@
+:host {
+  display: block;
+
+  mat-icon {
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+}
+
+.velario-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.velario-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  .header-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    mat-icon {
+      font-size: 2.5rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      color: #e67e22;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.75rem;
+      color: var(--mat-sys-on-surface);
+    }
+
+    .subtitle {
+      margin: 0.25rem 0 0;
+      color: var(--mat-sys-on-surface-variant);
+      font-size: 0.95rem;
+    }
+  }
+
+  .active-counter {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--mat-sys-secondary-container);
+    color: var(--mat-sys-on-secondary-container);
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Tarjeta de composición */
+.compose-card {
+  border-radius: 16px;
+  background-color: var(--mat-sys-surface-container-low);
+
+  .compose-body {
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .intention-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .field-label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--mat-sys-on-surface-variant);
+    }
+  }
+
+  .inputs-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .author-field {
+      max-width: 420px;
+    }
+
+    .message-field {
+      width: 100%;
+    }
+  }
+
+  .compose-actions {
+    padding: 0 1rem 1rem;
+
+    .light-btn {
+      padding: 0 1.5rem;
+      font-weight: 600;
+    }
+  }
+}
+
+/* Muro de Velas */
+.wall-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  .wall-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    h2 {
+      margin: 0;
+      font-size: 1.35rem;
+      color: var(--mat-sys-on-surface);
+    }
+  }
+}
+
+.candles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 1.25rem;
+}
+
+.candle-card {
+  border-radius: 16px;
+  background-color: var(--mat-sys-surface);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--mat-sys-level1);
+  }
+
+  mat-card-header {
+    align-items: center;
+    position: relative;
+
+    .candle-author {
+      font-size: 1rem;
+    }
+
+    .intention-pill {
+      margin-left: auto;
+      font-size: 0.78rem;
+      font-weight: 500;
+      background-color: var(--mat-sys-tertiary-container);
+      color: var(--mat-sys-on-tertiary-container);
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+  }
+
+  .candle-content {
+    padding-top: 0.75rem;
+    flex: 1;
+
+    .prayer-message {
+      font-size: 0.95rem;
+      line-height: 1.55;
+      color: var(--mat-sys-on-surface);
+      font-style: italic;
+      margin: 0;
+    }
+  }
+}
+
+/* Ilustración y animación CSS de la vela encendida */
+.candle-visual {
+  width: 40px;
+  height: 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  background-color: var(--mat-sys-surface-container);
+  border-radius: 12px;
+  padding-bottom: 4px;
+
+  .flame {
+    width: 10px;
+    height: 15px;
+    background: radial-gradient(circle at 50% 80%, #fff 10%, #ffeb3b 45%, #ff9800 85%, transparent 100%);
+    border-radius: 50% 50% 35% 35%;
+    box-shadow: 0 0 10px 3px rgba(255, 167, 38, 0.55);
+    animation: flicker 1.8s infinite alternate ease-in-out;
+    transform-origin: bottom center;
+  }
+
+  .wick {
+    width: 2px;
+    height: 3px;
+    background-color: #4e342e;
+  }
+
+  .wax {
+    width: 16px;
+    height: 16px;
+    background: linear-gradient(to right, #fff8e1, #ffe0b2);
+    border-radius: 3px 3px 2px 2px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+  }
+}
+
+@keyframes flicker {
+  0% {
+    transform: scale(1) rotate(-1.5deg);
+    opacity: 0.95;
+  }
+  50% {
+    transform: scale(1.06, 0.96) rotate(1.5deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.97, 1.04) rotate(-1deg);
+    opacity: 0.9;
+  }
+}
+
+.empty-velario {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: var(--mat-sys-on-surface-variant);
+}

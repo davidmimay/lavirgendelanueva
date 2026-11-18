@@ -1,0 +1,142 @@
+<div class="velario-container">
+
+  <!-- Cabecera -->
+  <header class="velario-header">
+    <div class="header-title">
+      <mat-icon color="primary">local_fire_department</mat-icon>
+      <div>
+        <h1>Velario Digital</h1>
+        <p class="subtitle">Enciende una luz ante Nuestra Señora de la Nueva y comparte tu oración</p>
+      </div>
+    </div>
+
+    <div class="active-counter">
+      <mat-icon>candle</mat-icon>
+      <span><strong>{{ candles().length }}</strong> velas encendidas</span>
+    </div>
+  </header>
+
+  <!-- Formulario para Encender una Vela -->
+  <mat-card appearance="outlined" class="compose-card">
+    <mat-card-header>
+      <mat-card-title>Enciende tu vela</mat-card-title>
+      <mat-card-subtitle>Elige el motivo de tu oración y escribe tu mensaje</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content class="compose-body">
+      
+      <!-- Selector de Intención -->
+      <div class="intention-selector">
+        <span class="field-label">Intención de la vela:</span>
+        <mat-chip-listbox 
+          [value]="newIntention()" 
+          (change)="newIntention.set($event.value || 'Pedir')"
+          aria-label="Seleccionar intención">
+          @for (item of intentions; track item.value) {
+            <mat-chip-option [value]="item.value">
+              {{ item.emoji }} {{ item.label }}
+            </mat-chip-option>
+          }
+        </mat-chip-listbox>
+      </div>
+
+      <!-- Campos de texto -->
+      <div class="inputs-grid">
+        <mat-form-field appearance="outline" class="author-field">
+          <mat-label>Tu nombre (opcional)</mat-label>
+          <input 
+            matInput 
+            [ngModel]="newAuthor()" 
+            (ngModelChange)="newAuthor.set($event)" 
+            placeholder="Ej. Familia García o dejar en blanco para Anónimo" 
+            maxlength="40" />
+          <mat-icon matSuffix>person</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="message-field">
+          <mat-label>Tu oración, petición o agradecimiento</mat-label>
+          <textarea 
+            matInput 
+            rows="3" 
+            [ngModel]="newMessage()" 
+            (ngModelChange)="newMessage.set($event)"
+            placeholder="Escribe aquí lo que deseas poner a los pies de la Virgen..."
+            maxlength="280"
+            required>
+          </textarea>
+          <mat-hint align="end">{{ newMessage().length }} / 280</mat-hint>
+        </mat-form-field>
+      </div>
+
+    </mat-card-content>
+
+    <mat-card-actions align="end" class="compose-actions">
+      <button 
+        mat-flat-button 
+        color="primary" 
+        class="light-btn"
+        [disabled]="!newMessage().trim()"
+        (click)="lightCandle()">
+        🔥 Encender vela
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <mat-divider></mat-divider>
+
+  <!-- Barra de filtros del Muro -->
+  <section class="wall-section">
+    <div class="wall-header">
+      <h2>Oraciones encendidas</h2>
+
+      <mat-chip-listbox [value]="activeFilter()" (change)="activeFilter.set($event.value || 'Todas')">
+        <mat-chip-option value="Todas">Todas</mat-chip-option>
+        @for (item of intentions; track item.value) {
+          <mat-chip-option [value]="item.value">{{ item.emoji }} {{ item.label }}</mat-chip-option>
+        }
+      </mat-chip-listbox>
+    </div>
+
+    <!-- Cuadrícula de Velas -->
+    <div class="candles-grid">
+      @for (candle of filteredCandles(); track candle.id) {
+        <mat-card appearance="outlined" class="candle-card">
+          <mat-card-header>
+            <!-- Vela animada en CSS -->
+            <div mat-card-avatar class="candle-visual" aria-hidden="true">
+              <div class="flame"></div>
+              <div class="wick"></div>
+              <div class="wax"></div>
+            </div>
+
+            <mat-card-title class="candle-author">{{ candle.author }}</mat-card-title>
+            <mat-card-subtitle>{{ candle.createdAt }}</mat-card-subtitle>
+
+            <span class="intention-pill">
+              {{ getEmoji(candle.intention) }} {{ candle.intention }}
+            </span>
+          </mat-card-header>
+
+          <mat-card-content class="candle-content">
+            <p class="prayer-message">"{{ candle.message }}"</p>
+          </mat-card-content>
+
+          <mat-card-actions align="end">
+            <button 
+              mat-button 
+              [color]="candle.prayedByMe ? 'primary' : ''"
+              (click)="joinPrayer(candle.id)">
+              <mat-icon>{{ candle.prayedByMe ? 'favorite' : 'volunteer_activism' }}</mat-icon>
+              <span>{{ candle.prayedByMe ? 'Unido en oración' : 'Unirme' }} ({{ candle.prayersCount }})</span>
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      } @empty {
+        <div class="empty-velario">
+          <p>Aún no hay velas en esta categoría. Sé el primero en encender una luz.</p>
+        </div>
+      }
+    </div>
+  </section>
+
+</div>
