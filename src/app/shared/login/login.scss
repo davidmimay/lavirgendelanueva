@@ -1,0 +1,44 @@
+:host {
+  display: block;
+
+  mat-icon {
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+}
+
+.auth-loading {
+  max-width: 400px;
+  margin: 4rem auto;
+  text-align: center;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+}
+
+.login-card {
+  max-width: 460px;
+  width: 100%;
+  border-radius: 16px;
+  background-color: var(--mat-sys-surface-container-low);
+
+  .login-body {
+    padding-top: 1rem;
+    color: var(--mat-sys-on-surface-variant);
+    line-height: 1.55;
+  }
+
+  .error-msg {
+    color: var(--mat-sys-error);
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+  }
+
+  mat-card-actions {
+    padding: 0.5rem 1rem 1rem;
+  }
+}

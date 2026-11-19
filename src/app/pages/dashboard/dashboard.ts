@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, computed, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -7,6 +7,9 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+
+import { AuthService } from '../../core/auth';
+import { Login } from '../../shared/login/login';
 
 export interface MemberProfile {
   name: string;
@@ -52,12 +55,32 @@ export interface Poll {
     MatDividerModule,
     MatChipsModule,
     MatRadioModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    Login
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
 })
 export class Dashboard {
+
+  protected authService = inject(AuthService);
+
+  // Datos combinados de la cuenta de Google + campos de hermano
+  memberProfile = computed(() => {
+    const user = this.authService.currentUser();
+
+    return {
+      uid: user?.uid ?? '',
+      name: user?.displayName || 'Hermano/a',
+      email: user?.email || 'Sin correo visible',
+      photoUrl: user?.photoURL || null,
+      // Valores provisionales hasta conectar con Firestore:
+      memberNumber: '0418',
+      role: 'Hermano/a de Número',
+      feeStatus: 'Al corriente'
+    };
+  });
+
   // Datos del hermano autenticado (conectable a tu Auth/Firestore)
   member = signal<MemberProfile>({
     name: 'Carlos Mendoza Ruiz',

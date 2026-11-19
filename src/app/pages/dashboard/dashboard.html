@@ -1,72 +1,95 @@
-<div class="dashboard-container">
+<app-login
+  title="Área de Hermanos"
+  subtitle="Identifícate con tu cuenta de Google"
+  description="Inicia sesión para ver tu ficha de hermano, tu correo vinculado y las novedades internas.">
 
-  <!-- Cabecera de bienvenida -->
-  <header class="dashboard-header">
-    <div class="welcome-title">
-      <mat-icon color="primary">diversity_3</mat-icon>
-      <div>
-        <h1>Portal del Hermano</h1>
-        <p class="subtitle">Bienvenido, {{ member().name }} • Área privada de la Hermandad</p>
+  <div class="dashboard-container">
+    <!-- Cabecera de bienvenida -->
+    <header class="dashboard-header">
+      <div class="welcome-title">
+        <mat-icon color="primary">diversity_3</mat-icon>
+        <div>
+          <h1>Portal del Hermano</h1>
+          <p class="subtitle">Bienvenido, {{ memberProfile().name }} • Área privada de la Hermandad</p>
+        </div>
       </div>
-    </div>
 
-    <button mat-stroked-button color="primary">
-      <mat-icon>badge</mat-icon>
-      Descargar Carnet Digital
-    </button>
-  </header>
+      <button mat-stroked-button color="primary">
+        <mat-icon>badge</mat-icon>
+        Descargar Carnet Digital
+      </button>
+    </header>
 
-  <!-- Cuadrícula principal del Dashboard -->
-  <div class="dashboard-grid">
+    <!-- Cuadrícula principal del Dashboard -->
 
-    <!-- COLUMNA IZQUIERDA: Perfil del Hermano -->
-    <aside class="profile-column">
-      <mat-card appearance="outlined" class="profile-card">
-        <mat-card-header>
-          <div mat-card-avatar class="avatar-circle">
-            <mat-icon>person</mat-icon>
-          </div>
-          <mat-card-title>{{ member().name }}</mat-card-title>
-          <mat-card-subtitle>{{ member().role }}</mat-card-subtitle>
-        </mat-card-header>
+    <div class="dashboard-grid">
+      <!-- COLUMNA IZQUIERDA: Perfil del Hermano -->
 
-        <mat-card-content class="profile-details">
-          <div class="badge-row">
-            <div class="stat-pill">
-              <span class="label">Nº Hermano</span>
-              <span class="value">#{{ member().memberNumber }}</span>
-            </div>
-            <div class="stat-pill">
-              <span class="label">Antigüedad</span>
-              <span class="value">Desde {{ member().sinceYear }}</span>
-            </div>
+      <aside class="profile-column">
+        <header class="members-header">
+          <div>
+            <h1>Ficha de Hermano</h1>
+            <p class="subtitle">Datos de tu cuenta y estado en la Hermandad</p>
           </div>
 
-          <mat-divider></mat-divider>
+        </header>
 
-          <ul class="info-list">
-            <li>
-              <mat-icon>verified</mat-icon>
-              <span>Cuota anual: <strong>{{ member().feeStatus }}</strong></span>
-            </li>
-            <li>
-              <mat-icon>mail</mat-icon>
-              <span>{{ member().email }}</span>
-            </li>
-          </ul>
-        </mat-card-content>
+        <mat-card appearance="outlined" class="profile-card">
+          <mat-card-header>
+            @if (memberProfile().photoUrl; as photo) {
+              <img
+                mat-card-avatar
+                [src]="photo"
+                [alt]="'Foto de perfil de ' + memberProfile().name"
+                class="avatar-photo"
+                referrerpolicy="no-referrer" />
+            } @else {
+              <div mat-card-avatar class="avatar-fallback">
+                <mat-icon>person</mat-icon>
+              </div>
+            }
 
-        <mat-card-actions align="end">
-          <button mat-button color="primary">
-            <mat-icon>edit</mat-icon>
-            Actualizar datos
-          </button>
-        </mat-card-actions>
-      </mat-card>
-    </aside>
+            <mat-card-title>{{ memberProfile().name }}</mat-card-title>
+            <mat-card-subtitle>{{ memberProfile().email }}</mat-card-subtitle>
+          </mat-card-header>
 
-    <!-- COLUMNA DERECHA: Votaciones y Noticias -->
-    <main class="content-column">
+          <mat-card-content class="profile-details">
+
+            <div class="badge-row">
+              <div class="stat-pill">
+                <span class="label">Nº Hermano</span>
+                <span class="value">#{{ member().memberNumber }}</span>
+              </div>
+              <div class="stat-pill">
+                <span class="label">Antigüedad</span>
+                <span class="value">Desde {{ member().sinceYear }}</span>
+              </div>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <ul class="info-list">
+              <li>
+                <mat-icon>verified</mat-icon>
+                <span>Cuota anual: <strong>{{ member().feeStatus }}</strong></span>
+              </li>
+              <li>
+                <mat-icon>badge</mat-icon>
+                <span>Cargo: <strong>{{ member().role }}</strong></span>
+              </li>
+            </ul>
+
+            <button mat-button color="warn" (click)="authService.logout()">
+              <mat-icon>logout</mat-icon>
+              Cerrar sesión
+            </button>
+
+          </mat-card-content>
+        </mat-card>
+      </aside>
+
+      <!-- COLUMNA DERECHA: Votaciones y Noticias -->
+      <main class="content-column">
 
       <!-- SECCIÓN 1: Votaciones Activas -->
       <section class="dashboard-section">
@@ -164,6 +187,7 @@
         </div>
       </section>
 
-    </main>
+      </main>
+    </div>
   </div>
-</div>
+</app-login>

@@ -1,0 +1,35 @@
+@if (authService.currentUser() === undefined) {
+  <div class="auth-loading">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    <p>Comprobando acceso...</p>
+  </div>
+
+} @else if (!authService.currentUser()) {
+  <section class="login-wrapper">
+    <mat-card appearance="outlined" class="login-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar color="primary">lock</mat-icon>
+        <mat-card-title>{{ title() }}</mat-card-title>
+        <mat-card-subtitle>{{ subtitle() }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content class="login-body">
+        <p>{{ description() }}</p>
+        @if (authService.error(); as err) {
+          <p class="error-msg">{{ err }}</p>
+        }
+      </mat-card-content>
+
+      <mat-card-actions align="end">
+        <button mat-flat-button color="primary" (click)="authService.loginWithGoogle()">
+          <mat-icon>login</mat-icon>
+          Continuar con Google
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </section>
+
+} @else {
+  <!-- Aquí se proyectará automáticamente el contenido de hermandad.html -->
+  <ng-content />
+}
