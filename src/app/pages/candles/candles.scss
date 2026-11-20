@@ -97,6 +97,11 @@
     }
   }
 
+  .submit-error {
+    margin: 0;
+    color: var(--mat-sys-error);
+  }
+
   .compose-actions {
     padding: 0 1rem 1rem;
 

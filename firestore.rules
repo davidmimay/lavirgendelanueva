@@ -1,0 +1,67 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function candlePath(candleId) {
+      return /databases/$(database)/documents/candles/$(candleId);
+    }
+
+    function prayerPath(candleId, userId) {
+      return /databases/$(database)/documents/candles/$(candleId)/prayers/$(userId);
+    }
+
+    match /candles/{candleId} {
+      allow read: if true;
+      allow create: if request.auth != null
+        && request.resource.data.keys().hasAll([
+          'author',
+          'intention',
+          'message',
+          'createdAt',
+          'prayersCount'
+        ])
+        && request.resource.data.keys().hasOnly([
+          'author',
+          'intention',
+          'message',
+          'createdAt',
+          'prayersCount'
+        ])
+        && request.resource.data.author is string
+        && request.resource.data.author.size() <= 40
+        && request.resource.data.intention in ['Pedir', 'Ofrecer', 'Agradecer', 'Bendecir']
+        && request.resource.data.message is string
+        && request.resource.data.message.size() > 0
+        && request.resource.data.message.size() <= 280
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.prayersCount == 1
+        && existsAfter(prayerPath(candleId, request.auth.uid))
+        && getAfter(prayerPath(candleId, request.auth.uid)).data.createdAt == request.time;
+      allow update: if request.auth != null
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['prayersCount'])
+        && request.resource.data.prayersCount == resource.data.prayersCount + 1
+        && !exists(prayerPath(candleId, request.auth.uid))
+        && existsAfter(prayerPath(candleId, request.auth.uid))
+        && getAfter(prayerPath(candleId, request.auth.uid)).data.createdAt == request.time;
+      allow delete: if false;
+
+      match /prayers/{userId} {
+        allow get: if request.auth != null && request.auth.uid == userId;
+        allow list: if false;
+        allow create: if request.auth != null
+          && request.auth.uid == userId
+          && request.resource.data.keys().hasAll(['createdAt'])
+          && request.resource.data.keys().hasOnly(['createdAt'])
+          && request.resource.data.createdAt == request.time
+          && existsAfter(candlePath(candleId))
+          && (
+            (!exists(candlePath(candleId))
+              && getAfter(candlePath(candleId)).data.prayersCount == 1)
+            || (exists(candlePath(candleId))
+              && getAfter(candlePath(candleId)).data.prayersCount == get(candlePath(candleId)).data.prayersCount + 1)
+          );
+        allow update, delete: if false;
+      }
+    }
+  }
+}

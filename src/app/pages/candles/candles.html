@@ -17,13 +17,17 @@
   </header>
 
   <!-- Formulario para Encender una Vela -->
-  <mat-card appearance="outlined" class="compose-card">
-    <mat-card-header>
-      <mat-card-title>Enciende tu vela</mat-card-title>
-      <mat-card-subtitle>Elige el motivo de tu oración y escribe tu mensaje</mat-card-subtitle>
-    </mat-card-header>
+  <app-login
+    title="Enciende una vela"
+    subtitle="Inicia sesión para compartir tu oración"
+    description="Solo las personas con sesión iniciada pueden encender una vela.">
+    <mat-card appearance="outlined" class="compose-card">
+      <mat-card-header>
+        <mat-card-title>Enciende tu vela</mat-card-title>
+        <mat-card-subtitle>Elige el motivo de tu oración y escribe tu mensaje</mat-card-subtitle>
+      </mat-card-header>
 
-    <mat-card-content class="compose-body">
+      <mat-card-content class="compose-body">
       
       <!-- Selector de Intención -->
       <div class="intention-selector">
@@ -68,19 +72,23 @@
         </mat-form-field>
       </div>
 
-    </mat-card-content>
+        @if (submitError(); as error) {
+          <p class="submit-error" role="alert">{{ error }}</p>
+        }
+      </mat-card-content>
 
-    <mat-card-actions align="end" class="compose-actions">
-      <button 
-        mat-flat-button 
-        color="primary" 
-        class="light-btn"
-        [disabled]="!newMessage().trim()"
-        (click)="lightCandle()">
-        🔥 Encender vela
-      </button>
-    </mat-card-actions>
-  </mat-card>
+      <mat-card-actions align="end" class="compose-actions">
+        <button
+          mat-flat-button
+          color="primary"
+          class="light-btn"
+          [disabled]="!newMessage().trim() || isSubmitting()"
+          (click)="lightCandle()">
+          🔥 {{ isSubmitting() ? 'Encendiendo...' : 'Encender vela' }}
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </app-login>
 
   <mat-divider></mat-divider>
 
@@ -96,6 +104,22 @@
         }
       </mat-chip-listbox>
     </div>
+
+    @if (prayerError(); as error) {
+      <p role="alert">{{ error }}</p>
+      @if (!authService.currentUser()) {
+        <button mat-stroked-button color="primary" (click)="authService.loginWithGoogle()">
+          Iniciar sesión para unirme
+        </button>
+      }
+    }
+
+    @if (candlesLoading()) {
+      <p role="status">Cargando velas...</p>
+    }
+    @if (candlesError(); as error) {
+      <p role="alert">{{ error }}</p>
+    }
 
     <!-- Cuadrícula de Velas -->
     <div class="candles-grid">
@@ -125,16 +149,22 @@
             <button 
               mat-button 
               [color]="candle.prayedByMe ? 'primary' : ''"
+              [disabled]="candle.prayedByMe || pendingPrayers().includes(candle.id)"
               (click)="joinPrayer(candle.id)">
               <mat-icon>{{ candle.prayedByMe ? 'favorite' : 'volunteer_activism' }}</mat-icon>
-              <span>{{ candle.prayedByMe ? 'Unido en oración' : 'Unirme' }} ({{ candle.prayersCount }})</span>
+              <span>
+                {{ pendingPrayers().includes(candle.id) ? 'Uniéndome...' : candle.prayedByMe ? 'Unido en oración' : 'Unirme' }}
+                ({{ candle.prayersCount }})
+              </span>
             </button>
           </mat-card-actions>
         </mat-card>
       } @empty {
-        <div class="empty-velario">
-          <p>Aún no hay velas en esta categoría. Sé el primero en encender una luz.</p>
-        </div>
+        @if (!candlesLoading() && !candlesError()) {
+          <div class="empty-velario">
+            <p>Aún no hay velas en esta categoría. Sé el primero en encender una luz.</p>
+          </div>
+        }
       }
     </div>
   </section>
