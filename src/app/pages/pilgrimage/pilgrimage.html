@@ -164,35 +164,49 @@
       </mat-card>
     }
 
-    <!-- Cuadrícula de productos florales -->
-    <div class="offerings-grid">
-      @for (flower of offerings(); track flower.id) {
-        <mat-card appearance="outlined" class="flower-card">
-          <div class="image-wrapper">
-            <img mat-card-image [src]="flower.imageUrl" [alt]="flower.name" loading="lazy" />
-            @if (flower.tag) {
-              <span class="flower-badge">{{ flower.tag }}</span>
-            }
-          </div>
+    @if (offeringsLoading()) {
+      <p role="status">Cargando productos florales...</p>
+    }
+    @if (offeringsError(); as error) {
+      <p role="alert">{{ error }}</p>
+    }
+    @if (offeringsWarning(); as warning) {
+      <p role="status">{{ warning }}</p>
+    }
 
-          <mat-card-header>
-            <mat-card-title>{{ flower.name }}</mat-card-title>
-            <mat-card-subtitle class="price-text">{{ flower.price }} €</mat-card-subtitle>
-          </mat-card-header>
+    @if (offerings().length > 0) {
+      <!-- Cuadrícula de productos florales -->
+      <div class="offerings-grid">
+        @for (flower of offerings(); track flower.id) {
+          <mat-card appearance="outlined" class="flower-card">
+            <div class="image-wrapper">
+              <img mat-card-image [src]="flower.image" [alt]="flower.name" loading="lazy" />
+              @if (flower.tag) {
+                <span class="flower-badge">{{ flower.tag }}</span>
+              }
+            </div>
 
-          <mat-card-content>
-            <p class="flower-desc">{{ flower.description }}</p>
-          </mat-card-content>
+            <mat-card-header>
+              <mat-card-title>{{ flower.name }}</mat-card-title>
+              <mat-card-subtitle class="price-text">{{ flower.price }} €</mat-card-subtitle>
+            </mat-card-header>
 
-          <mat-card-actions align="end">
-            <button mat-flat-button color="primary" (click)="selectForOrder(flower)">
-              <mat-icon>add_shopping_cart</mat-icon>
-              Ofrendar
-            </button>
-          </mat-card-actions>
-        </mat-card>
-      }
-    </div>
+            <mat-card-content>
+              <p class="flower-desc">{{ flower.description }}</p>
+            </mat-card-content>
+
+            <mat-card-actions align="end">
+              <button mat-flat-button color="primary" (click)="selectForOrder(flower)">
+                <mat-icon>add_shopping_cart</mat-icon>
+                Ofrendar
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        }
+      </div>
+    } @else if (!offeringsLoading() && !offeringsError()) {
+      <p>Aún no hay productos florales disponibles.</p>
+    }
   </section>
 
 </div>

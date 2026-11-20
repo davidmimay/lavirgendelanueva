@@ -8,13 +8,15 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { collection, onSnapshot, Unsubscribe } from 'firebase/firestore';
+import { firestoreDb } from '../../core/firebase.config';
 
 export interface FloralOffering {
   id: string;
   name: string;
   description: string;
   price: number;
-  imageUrl: string;
+  image: string;
   tag?: string;
 }
 
@@ -38,8 +40,12 @@ export class Pilgrimage implements OnInit, OnDestroy {
   private sanitizer = inject(DomSanitizer);
   private snackBar = inject(MatSnackBar);
   private timerId?: ReturnType<typeof setInterval>;
+  private offeringsUnsubscribe?: Unsubscribe;
 
   now = signal<Date>(new Date());
+  offeringsLoading = signal(true);
+  offeringsError = signal<string | null>(null);
+  offeringsWarning = signal<string | null>(null);
 
   // Cálculo automático de la fecha del próximo Lunes de Pascua
   nextEasterMonday = computed(() => {
@@ -76,40 +82,7 @@ export class Pilgrimage implements OnInit, OnDestroy {
     'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12174.5!2d-4.3645!3d40.3712!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd41a8e4c1b7e001%3A0x40340f3be4bc8c0!2sErmita%20de%20la%20Virgen%20de%20la%20Nueva!5e0!3m2!1ses!2ses!4v1700000000000'
   );
 
-  // Catálogo de ofrendas florales para el altar
-  offerings = signal<FloralOffering[]>([
-    {
-      id: 'fl1',
-      name: 'Ramo de Claveles Blancos',
-      description: 'Docena de claveles blancos frescos con verde ornamental y cinta dedicatoria.',
-      price: 15,
-      imageUrl: 'assets/romeria/claveles-blancos.jpg',
-      tag: 'Tradicional'
-    },
-    {
-      id: 'fl2',
-      name: 'Centro de Rosas y Lilium',
-      description: 'Composición floral en tonos blancos y crema preparada para los pies del altar mayor.',
-      price: 35,
-      imageUrl: 'assets/romeria/centro-rosas.jpg',
-      tag: 'Altar Mayor'
-    },
-    {
-      id: 'fl3',
-      name: 'Ramo de Margaritas y Paniculata',
-      description: 'Ramo silvestre de primavera en honor a la romería en el pinar del pantano.',
-      price: 20,
-      imageUrl: 'assets/romeria/margaritas.jpg'
-    },
-    {
-      id: 'fl4',
-      name: 'Jardinera de Orquídeas Blancas',
-      description: 'Planta natural de larga duración para ornamentar la ermita durante toda la octava.',
-      price: 45,
-      imageUrl: 'assets/romeria/orquideas.jpg',
-      tag: 'Duradera'
-    }
-  ]);
+  offerings = signal<FloralOffering[]>([]);
 
   // Estado del pedido de ofrenda
   selectedOffering = signal<FloralOffering | null>(null);
@@ -118,10 +91,58 @@ export class Pilgrimage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.timerId = setInterval(() => this.now.set(new Date()), 1000);
+    this.offeringsUnsubscribe = onSnapshot(
+      collection(firestoreDb, 'bouquets'),
+      snapshot => {
+        let hasInvalidOffering = false;
+        const offerings = snapshot.docs.flatMap(document => {
+          const data = document.data();
+          const name = data['name'];
+          const description = data['description'];
+          const price = data['price'];
+          const image = data['image'];
+          const tag = data['tag'];
+
+          if (
+            typeof name !== 'string' ||
+            typeof description !== 'string' ||
+            typeof price !== 'number' ||
+            !Number.isFinite(price) ||
+            typeof image !== 'string'
+          ) {
+            console.error(`El documento ${document.id} de "bouquets" tiene campos no válidos.`);
+            hasInvalidOffering = true;
+            return [];
+          }
+
+          return [{
+            id: document.id,
+            name,
+            description,
+            price,
+            image,
+            ...(typeof tag === 'string' ? { tag } : {})
+          }];
+        });
+
+        this.offerings.set(offerings);
+        this.offeringsLoading.set(false);
+        this.offeringsError.set(null);
+        this.offeringsWarning.set(hasInvalidOffering
+          ? 'Algunos productos no se muestran porque sus datos no son válidos.'
+          : null);
+      },
+      error => {
+        console.error('Error al cargar los productos florales desde Firestore:', error);
+        this.offeringsLoading.set(false);
+        this.offeringsError.set('No se pudieron cargar los productos florales. Comprueba los permisos de Firestore e inténtalo de nuevo.');
+      }
+    );
   }
 
   ngOnDestroy() {
     if (this.timerId) clearInterval(this.timerId);
+    this.offeringsUnsubscribe?.();
   }
 
   selectForOrder(item: FloralOffering) {
