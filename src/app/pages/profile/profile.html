@@ -1,0 +1,34 @@
+<main class="profile-page">
+  <a mat-button routerLink="/velario">
+    <mat-icon>arrow_back</mat-icon>
+    Volver al velario
+  </a>
+
+  <h1>{{ displayName() }}</h1>
+  <h2>Oraciones encendidas</h2>
+
+  @if (loading()) {
+    <p role="status">Cargando oraciones...</p>
+  }
+  @if (error(); as message) {
+    <p role="alert">{{ message }}</p>
+  }
+
+  <section class="candles-list">
+    @for (candle of candles(); track candle.id) {
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>{{ candle.intention }}</mat-card-title>
+          <mat-card-subtitle>{{ candle.created }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>{{ candle.message }}</p>
+        </mat-card-content>
+      </mat-card>
+    } @empty {
+      @if (!loading() && !error()) {
+        <p>Este usuario aún no ha encendido ninguna vela.</p>
+      }
+    }
+  </section>
+</main>

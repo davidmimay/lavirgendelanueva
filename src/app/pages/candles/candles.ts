@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
+import { RouterLink } from '@angular/router';
 import { FirebaseError } from 'firebase/app';
 import {
   collection,
@@ -34,19 +35,21 @@ export interface IntentionOption {
 
 export interface CandleEntry {
   id: string;
+  uid?: string;
   author: string;
   intention: CandleIntention;
   message: string;
-  createdAt: string;
+  created: string;
   prayersCount: number;
   prayedByMe?: boolean;
 }
 
 interface CandleDocument {
+  uid?: string;
   author: string;
   intention: CandleIntention;
   message: string;
-  createdAt: Timestamp;
+  created: Timestamp;
   prayersCount: number;
 }
 
@@ -62,6 +65,7 @@ interface CandleDocument {
     MatInputModule,
     MatChipsModule,
     MatDividerModule,
+    RouterLink,
     Login
   ],
   templateUrl: './candles.html',
@@ -77,8 +81,6 @@ export class Candles {
     { value: 'Bendecir', emoji: '✨', label: 'Bendecir' }
   ];
 
-  // Estado del formulario para nueva vela
-  newAuthor = signal<string>('');
   newIntention = signal<CandleIntention>('Pedir');
   newMessage = signal<string>('');
 
@@ -98,17 +100,18 @@ export class Candles {
 
   constructor() {
     const unsubscribe = onSnapshot(
-      query(collection(firestoreDb, 'candles'), orderBy('createdAt', 'desc')),
+      query(collection(firestoreDb, 'candles'), orderBy('created', 'desc')),
       snapshot => {
         const prayerStates = new Map(this.candles().map(candle => [candle.id, candle.prayedByMe]));
         this.candles.set(snapshot.docs.map(document => {
           const candle = document.data({ serverTimestamps: 'estimate' }) as CandleDocument;
           return {
             id: document.id,
+            uid: candle.uid,
             author: candle.author,
             intention: candle.intention,
             message: candle.message,
-            createdAt: this.formatCreatedAt(candle.createdAt),
+            created: this.formatCreated(candle.created),
             prayersCount: candle.prayersCount,
             prayedByMe: prayerStates.get(document.id) ?? false
           };
@@ -153,19 +156,19 @@ export class Candles {
       const candleRef = doc(collection(firestoreDb, 'candles'));
       const batch = writeBatch(firestoreDb);
       batch.set(candleRef, {
-        author: this.newAuthor().trim() || 'Anónimo',
+        uid: user.uid,
+        author: user.displayName?.trim() || user.email || 'Usuario',
         intention: this.newIntention(),
         message: text,
-        createdAt: serverTimestamp(),
+        created: serverTimestamp(),
         prayersCount: 1
       });
       batch.set(doc(candleRef, 'prayers', user.uid), {
-        createdAt: serverTimestamp()
+        created: serverTimestamp()
       });
       await batch.commit();
 
       this.newMessage.set('');
-      this.newAuthor.set('');
     } catch (error) {
       console.error('Error al guardar la vela en Firestore:', error);
       if (error instanceof FirebaseError && error.code === 'permission-denied') {
@@ -208,7 +211,7 @@ export class Candles {
           throw new Error('El contador de oraciones no es válido.');
         }
 
-        transaction.set(prayerRef, { createdAt: serverTimestamp() });
+        transaction.set(prayerRef, { created: serverTimestamp() });
         transaction.update(candleRef, { prayersCount: prayersCount + 1 });
       });
 
@@ -231,7 +234,7 @@ export class Candles {
     return this.intentions.find(i => i.value === intention)?.emoji ?? '🕯️';
   }
 
-  private formatCreatedAt(timestamp: Timestamp): string {
+  private formatCreated(timestamp: Timestamp): string {
     const minutesAgo = Math.floor((Date.now() - timestamp.toDate().getTime()) / 60_000);
     if (minutesAgo < 1) return 'Ahora mismo';
     if (minutesAgo < 60) return `Hace ${minutesAgo} min`;

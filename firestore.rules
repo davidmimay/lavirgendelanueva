@@ -14,35 +14,38 @@ service cloud.firestore {
       allow read: if true;
       allow create: if request.auth != null
         && request.resource.data.keys().hasAll([
+          'uid',
           'author',
           'intention',
           'message',
-          'createdAt',
+          'created',
           'prayersCount'
         ])
         && request.resource.data.keys().hasOnly([
+          'uid',
           'author',
           'intention',
           'message',
-          'createdAt',
+          'created',
           'prayersCount'
         ])
+        && request.resource.data.uid == request.auth.uid
         && request.resource.data.author is string
         && request.resource.data.author.size() <= 40
         && request.resource.data.intention in ['Pedir', 'Ofrecer', 'Agradecer', 'Bendecir']
         && request.resource.data.message is string
         && request.resource.data.message.size() > 0
         && request.resource.data.message.size() <= 280
-        && request.resource.data.createdAt == request.time
+        && request.resource.data.created == request.time
         && request.resource.data.prayersCount == 1
         && existsAfter(prayerPath(candleId, request.auth.uid))
-        && getAfter(prayerPath(candleId, request.auth.uid)).data.createdAt == request.time;
+        && getAfter(prayerPath(candleId, request.auth.uid)).data.created == request.time;
       allow update: if request.auth != null
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['prayersCount'])
         && request.resource.data.prayersCount == resource.data.prayersCount + 1
         && !exists(prayerPath(candleId, request.auth.uid))
         && existsAfter(prayerPath(candleId, request.auth.uid))
-        && getAfter(prayerPath(candleId, request.auth.uid)).data.createdAt == request.time;
+        && getAfter(prayerPath(candleId, request.auth.uid)).data.created == request.time;
       allow delete: if false;
 
       match /prayers/{userId} {
@@ -50,9 +53,9 @@ service cloud.firestore {
         allow list: if false;
         allow create: if request.auth != null
           && request.auth.uid == userId
-          && request.resource.data.keys().hasAll(['createdAt'])
-          && request.resource.data.keys().hasOnly(['createdAt'])
-          && request.resource.data.createdAt == request.time
+          && request.resource.data.keys().hasAll(['created'])
+          && request.resource.data.keys().hasOnly(['created'])
+          && request.resource.data.created == request.time
           && existsAfter(candlePath(candleId))
           && (
             (!exists(candlePath(candleId))

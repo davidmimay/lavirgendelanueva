@@ -1,0 +1,16 @@
+.profile-page {
+  display: grid;
+  gap: 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+h1, h2 {
+  margin: 0;
+}
+
+.candles-list {
+  display: grid;
+  gap: 1rem;
+}

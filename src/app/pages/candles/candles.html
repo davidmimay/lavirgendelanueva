@@ -44,18 +44,18 @@
         </mat-chip-listbox>
       </div>
 
-      <!-- Campos de texto -->
+      <!-- Perfil y oración -->
       <div class="inputs-grid">
-        <mat-form-field appearance="outline" class="author-field">
-          <mat-label>Tu nombre (opcional)</mat-label>
-          <input 
-            matInput 
-            [ngModel]="newAuthor()" 
-            (ngModelChange)="newAuthor.set($event)" 
-            placeholder="Ej. Familia García o dejar en blanco para Anónimo" 
-            maxlength="40" />
-          <mat-icon matSuffix>person</mat-icon>
-        </mat-form-field>
+        @if (authService.currentUser(); as user) {
+          <div class="author-profile">
+            @if (user.photoURL) {
+              <img [src]="user.photoURL" [alt]="'Foto de perfil de ' + (user.displayName || 'anónimo')" referrerpolicy="no-referrer" />
+            } @else {
+              <mat-icon aria-hidden="true">account_circle</mat-icon>
+            }
+            <span>{{ user.displayName || 'Anónimo' }}</span>
+          </div>
+        }
 
         <mat-form-field appearance="outline" class="message-field">
           <mat-label>Tu oración, petición o agradecimiento</mat-label>
@@ -133,8 +133,14 @@
               <div class="wax"></div>
             </div>
 
-            <mat-card-title class="candle-author">{{ candle.author }}</mat-card-title>
-            <mat-card-subtitle>{{ candle.createdAt }}</mat-card-subtitle>
+            <mat-card-title class="candle-author">
+              @if (candle.uid) {
+                <a mat-button [routerLink]="['/usuario', candle.uid]">{{ candle.author }}</a>
+              } @else {
+                {{ candle.author }}
+              }
+            </mat-card-title>
+            <mat-card-subtitle>{{ candle.created }}</mat-card-subtitle>
 
             <span class="intention-pill">
               {{ getEmoji(candle.intention) }} {{ candle.intention }}

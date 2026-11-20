@@ -22,6 +22,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/candles/candles').then(m => m.Candles)
   },
   {
+    path: 'usuario/:uid',
+    loadComponent: () => import('./pages/profile/profile').then(m => m.Profile)
+  },
+  {
     path: 'oraciones',
     children: [
       {
