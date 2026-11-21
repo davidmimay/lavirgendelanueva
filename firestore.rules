@@ -10,6 +10,41 @@ service cloud.firestore {
       return /databases/$(database)/documents/candles/$(candleId)/prayers/$(userId);
     }
 
+    function proposalVotePath(proposalId, userId) {
+      return /databases/$(database)/documents/proposals/$(proposalId)/votes/$(userId);
+    }
+
+    function userPath(userId) {
+      return /databases/$(database)/documents/users/$(userId);
+    }
+
+    function canManageProposals() {
+      return request.auth != null
+        && exists(userPath(request.auth.uid))
+        && get(userPath(request.auth.uid)).data.role
+          in ['admin', 'administrator', 'administrador', 'president', 'presidente'];
+    }
+
+    function validProposalVoteUpdate(proposalId, optionId) {
+      let proposal = get(/databases/$(database)/documents/proposals/$(proposalId)).data;
+      let updatedProposal = getAfter(/databases/$(database)/documents/proposals/$(proposalId)).data;
+      return request.auth != null
+        && optionId is string
+        && exists(/databases/$(database)/documents/proposals/$(proposalId))
+        && !exists(proposalVotePath(proposalId, request.auth.uid))
+        && existsAfter(proposalVotePath(proposalId, request.auth.uid))
+        && updatedProposal.diff(proposal).affectedKeys().hasOnly(['options'])
+        && proposal.options is map
+        && updatedProposal.options is map
+        && proposal.options.keys().hasAll(updatedProposal.options.keys())
+        && updatedProposal.options.diff(proposal.options).affectedKeys().hasOnly([optionId])
+        && proposal.options[optionId].label == updatedProposal.options[optionId].label
+        && proposal.options[optionId].diff(updatedProposal.options[optionId]).affectedKeys().hasOnly(['votes'])
+        && proposal.options[optionId].votes is int
+        && updatedProposal.options[optionId].votes == proposal.options[optionId].votes + 1
+        && getAfter(proposalVotePath(proposalId, request.auth.uid)).data.optionId == optionId;
+    }
+
     match /candles/{candleId} {
       allow read: if true;
       allow create: if request.auth != null
@@ -75,6 +110,62 @@ service cloud.firestore {
     match /bouquets/{bouquetId} {
       allow read: if true;
       allow write: if false;
+    }
+
+    match /proposals/{proposalId} {
+      allow read: if true;
+      allow create: if canManageProposals()
+        && request.resource.data.keys().hasAll([
+          'title',
+          'description',
+          'closingDate',
+          'options',
+          'createdAt',
+          'createdBy'
+        ])
+        && request.resource.data.keys().hasOnly([
+          'title',
+          'description',
+          'closingDate',
+          'options',
+          'createdAt',
+          'createdBy'
+        ])
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0
+        && request.resource.data.title.size() <= 120
+        && request.resource.data.description is string
+        && request.resource.data.description.size() > 0
+        && request.resource.data.description.size() <= 1000
+        && request.resource.data.closingDate is string
+        && request.resource.data.options is map
+        && request.resource.data.options.keys().size() >= 2
+        && request.resource.data.options.keys().size() <= 8
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.createdBy == request.auth.uid;
+      allow delete: if false;
+      allow update: if validProposalVoteUpdate(
+        proposalId,
+        getAfter(proposalVotePath(proposalId, request.auth.uid)).data.optionId
+      );
+
+      match /votes/{userId} {
+        allow get: if request.auth != null && request.auth.uid == userId;
+        allow list: if false;
+        allow create: if request.auth != null
+          && request.auth.uid == userId
+          && request.resource.data.keys().hasAll(['optionId', 'createdAt'])
+          && request.resource.data.keys().hasOnly(['optionId', 'createdAt'])
+          && request.resource.data.optionId is string
+          && request.resource.data.createdAt == request.time
+          && validProposalVoteUpdate(proposalId, request.resource.data.optionId);
+        allow update, delete: if false;
+      }
+    }
+
+    match /users/{userId} {
+      allow get: if request.auth != null && request.auth.uid == userId;
+      allow list, create, update, delete: if false;
     }
   }
 }

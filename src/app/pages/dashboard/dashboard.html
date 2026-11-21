@@ -98,6 +98,84 @@
           <h2>Votaciones y Consultas</h2>
         </div>
 
+        @if (proposalsLoading()) {
+          <p role="status">Cargando propuestas...</p>
+        }
+        @if (proposalsError(); as error) {
+          <p role="alert">{{ error }}</p>
+        }
+        @if (voteError(); as error) {
+          <p role="alert">{{ error }}</p>
+        }
+        @if (roleLoading()) {
+          <p role="status">Comprobando permisos...</p>
+        }
+        @if (roleError(); as error) {
+          <p role="alert">{{ error }}</p>
+        }
+
+        @if (canManageProposals()) {
+          <mat-card appearance="outlined" class="proposal-editor">
+            <mat-card-header>
+              <mat-card-title>Nueva propuesta</mat-card-title>
+              <mat-card-subtitle>Disponible para administradores y presidencia</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content class="proposal-form">
+              <mat-form-field appearance="outline">
+                <mat-label>Título</mat-label>
+                <input matInput maxlength="120" [ngModel]="proposalTitle()" (ngModelChange)="proposalTitle.set($event)" />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Descripción</mat-label>
+                <textarea matInput rows="3" maxlength="1000" [ngModel]="proposalDescription()" (ngModelChange)="proposalDescription.set($event)"></textarea>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Fecha de cierre</mat-label>
+                <input matInput type="date" [ngModel]="proposalClosingDate()" (ngModelChange)="proposalClosingDate.set($event)" />
+              </mat-form-field>
+
+              <div class="proposal-options">
+                <h3>Opciones</h3>
+                @for (option of proposalOptionLabels(); track $index; let index = $index) {
+                  <div class="proposal-option-row">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Opción {{ index + 1 }}</mat-label>
+                      <input matInput maxlength="160" [ngModel]="option" (ngModelChange)="updateProposalOption(index, $event)" />
+                    </mat-form-field>
+                    <button
+                      mat-icon-button
+                      type="button"
+                      aria-label="Eliminar opción"
+                      [disabled]="proposalOptionLabels().length <= 2"
+                      (click)="removeProposalOption(index)">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                }
+                <button mat-button type="button" [disabled]="proposalOptionLabels().length >= 8" (click)="addProposalOption()">
+                  <mat-icon>add</mat-icon>
+                  Añadir opción
+                </button>
+              </div>
+
+              @if (createProposalError(); as error) {
+                <p role="alert">{{ error }}</p>
+              }
+              @if (createProposalSuccess(); as message) {
+                <p role="status">{{ message }}</p>
+              }
+            </mat-card-content>
+            <mat-card-actions align="end">
+              <button mat-flat-button color="primary" [disabled]="!canSubmitProposal()" (click)="createProposal()">
+                <mat-icon>add_circle</mat-icon>
+                {{ creatingProposal() ? 'Creando...' : 'Crear propuesta' }}
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        }
+
         <div class="cards-stack">
           @for (poll of polls(); track poll.id) {
             <mat-card appearance="outlined" class="poll-card">
@@ -147,14 +225,18 @@
                   <button 
                     mat-flat-button 
                     color="primary" 
-                    [disabled]="!poll.selectedOptionId"
+                    [disabled]="!poll.selectedOptionId || poll.submittingVote"
                     (click)="submitVote(poll.id)">
                     <mat-icon>send</mat-icon>
-                    Emitir voto
+                    {{ poll.submittingVote ? 'Guardando...' : 'Emitir voto' }}
                   </button>
                 </mat-card-actions>
               }
             </mat-card>
+          } @empty {
+            @if (!proposalsLoading() && !proposalsError()) {
+              <p>Aún no hay propuestas disponibles.</p>
+            }
           }
         </div>
       </section>
