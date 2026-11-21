@@ -53,7 +53,7 @@
             } @else {
               <mat-icon aria-hidden="true">account_circle</mat-icon>
             }
-            <span>{{ user.displayName || 'Anónimo' }}</span>
+            <a mat-button [routerLink]="['/usuario', user.uid]">{{ user.displayName || 'Anónimo' }}</a>
           </div>
         }
 

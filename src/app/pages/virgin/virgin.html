@@ -58,7 +58,7 @@
 
       <div class="viewer-wrapper">
         <model-viewer 
-          src="assets/models/virgen.glb" 
+          src="virgin-model.glb" 
           alt="Modelo 3D de la Virgen de la Nueva"
           auto-rotate 
           camera-controls 
@@ -116,7 +116,7 @@
       </mat-card-content>
 
       <mat-card-actions align="end">
-        <a mat-button color="primary" href="https://maps.google.com" target="_blank" rel="noopener">
+        <a mat-button color="primary" [href]="mapUrl" target="_blank" rel="noopener">
           <mat-icon>open_in_new</mat-icon>
           Abrir recorrido en Google Maps
         </a>

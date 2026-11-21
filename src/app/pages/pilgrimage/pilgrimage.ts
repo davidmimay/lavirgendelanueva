@@ -79,7 +79,7 @@ export class Pilgrimage implements OnInit, OnDestroy {
 
   // Mapa centrado en el entorno de la Ermita de la Virgen de la Nueva (Pantano de San Juan)
   mapUrl: SafeResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-    'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12174.5!2d-4.3645!3d40.3712!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd41a8e4c1b7e001%3A0x40340f3be4bc8c0!2sErmita%20de%20la%20Virgen%20de%20la%20Nueva!5e0!3m2!1ses!2ses!4v1700000000000'
+    'https://www.google.com/maps/d/embed?mid=1AfxI0oTkb-h-TeYtT2N30dmjUC210N4&hl=es&ehbc=2E312F'
   );
 
   offerings = signal<FloralOffering[]>([]);

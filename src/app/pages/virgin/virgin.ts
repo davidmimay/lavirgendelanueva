@@ -60,7 +60,7 @@ export class Virgin implements OnInit, OnDestroy {
 
   // URL segura para el mapa de la procesión (Google My Maps o Google Maps Embed)
   mapUrl: SafeResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-    'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3043.8!2d-4.398!3d40.362!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDIxJzQzLjIiTiA0wrAyMyczMi44Ilc!5e0!3m2!1ses!2ses!4v1700000000000'
+    'https://www.google.com/maps/d/embed?mid=1vdDAgZSw4Kjy6mHmJr876mLOJoIRmlw&ehbc=2E312F'
   );
 
   ngOnInit() {
