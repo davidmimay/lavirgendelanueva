@@ -163,6 +163,35 @@ service cloud.firestore {
       }
     }
 
+    match /announcements/{announcementId} {
+      allow read: if true;
+      allow create: if canManageProposals()
+        && request.resource.data.keys().hasAll([
+          'title',
+          'summary',
+          'tag',
+          'createdAt',
+          'createdBy'
+        ])
+        && request.resource.data.keys().hasOnly([
+          'title',
+          'summary',
+          'tag',
+          'createdAt',
+          'createdBy'
+        ])
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0
+        && request.resource.data.title.size() <= 120
+        && request.resource.data.summary is string
+        && request.resource.data.summary.size() > 0
+        && request.resource.data.summary.size() <= 1000
+        && request.resource.data.tag in ['Cabildo', 'Cultos', 'Obra Social', 'Aviso']
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.createdBy == request.auth.uid;
+      allow update, delete: if false;
+    }
+
     match /users/{userId} {
       allow get: if request.auth != null && request.auth.uid == userId;
       allow list, create, update, delete: if false;

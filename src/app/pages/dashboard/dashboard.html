@@ -248,6 +248,56 @@
           <h2>Noticias y Circulares Internas</h2>
         </div>
 
+        @if (announcementsLoading()) {
+          <p role="status">Cargando noticias y circulares...</p>
+        }
+        @if (announcementsError(); as error) {
+          <p role="alert">{{ error }}</p>
+        }
+
+        @if (canManageProposals()) {
+          <mat-card appearance="outlined" class="proposal-editor">
+            <mat-card-header>
+              <mat-card-title>Nueva noticia o circular</mat-card-title>
+              <mat-card-subtitle>Disponible para administradores y presidencia</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content class="proposal-form">
+              <mat-form-field appearance="outline">
+                <mat-label>Título</mat-label>
+                <input matInput maxlength="120" [ngModel]="announcementTitle()" (ngModelChange)="announcementTitle.set($event)" />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Tipo</mat-label>
+                <select matNativeControl [ngModel]="announcementTag()" (ngModelChange)="announcementTag.set($event)">
+                  <option value="Cabildo">Cabildo</option>
+                  <option value="Cultos">Cultos</option>
+                  <option value="Obra Social">Obra Social</option>
+                  <option value="Aviso">Aviso</option>
+                </select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Contenido</mat-label>
+                <textarea matInput rows="4" maxlength="1000" [ngModel]="announcementSummary()" (ngModelChange)="announcementSummary.set($event)"></textarea>
+              </mat-form-field>
+
+              @if (createAnnouncementError(); as error) {
+                <p role="alert">{{ error }}</p>
+              }
+              @if (createAnnouncementSuccess(); as message) {
+                <p role="status">{{ message }}</p>
+              }
+            </mat-card-content>
+            <mat-card-actions align="end">
+              <button mat-flat-button color="primary" [disabled]="!canSubmitAnnouncement()" (click)="createAnnouncement()">
+                <mat-icon>campaign</mat-icon>
+                {{ creatingAnnouncement() ? 'Publicando...' : 'Publicar anuncio' }}
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        }
+
         <div class="cards-stack">
           @for (item of news(); track item.id) {
             <mat-card appearance="outlined" class="news-card">
@@ -265,6 +315,10 @@
                 <button mat-button color="primary">Leer circular</button>
               </mat-card-actions>
             </mat-card>
+          } @empty {
+            @if (!announcementsLoading() && !announcementsError()) {
+              <p>Aún no hay noticias ni circulares disponibles.</p>
+            }
           }
         </div>
       </section>
