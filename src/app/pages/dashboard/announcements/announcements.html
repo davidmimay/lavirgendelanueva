@@ -1,0 +1,62 @@
+<section class="dashboard-section">
+  <div class="section-heading">
+    <mat-icon color="primary">campaign</mat-icon>
+    <h2>Noticias y Circulares Internas</h2>
+    @if (canManage()) {
+      <button
+        mat-icon-button
+        color="primary"
+        aria-label="Crear noticia o circular"
+        title="Crear noticia o circular"
+        (click)="openCreateDialog()">
+        <mat-icon>add</mat-icon>
+      </button>
+    }
+  </div>
+
+  @if (roleLoading()) {
+    <p role="status">Comprobando permisos...</p>
+  }
+  @if (roleError(); as message) {
+    <p role="alert">{{ message }}</p>
+  }
+  @if (loading()) {
+    <p role="status">Cargando noticias y circulares...</p>
+  }
+  @if (error(); as message) {
+    <p role="alert">{{ message }}</p>
+  }
+  @if (createError(); as message) {
+    <p role="alert">{{ message }}</p>
+  }
+  @if (createSuccess(); as message) {
+    <p role="status">{{ message }}</p>
+  }
+  @if (creating()) {
+    <p role="status">Publicando anuncio...</p>
+  }
+
+  <div class="cards-stack">
+    @for (item of items(); track item.id) {
+      <mat-card appearance="outlined" class="news-card">
+        <mat-card-header>
+          <mat-card-title>{{ item.title }}</mat-card-title>
+          <mat-card-subtitle>{{ item.date }}</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <p class="news-summary">{{ item.summary }}</p>
+        </mat-card-content>
+
+        <mat-card-actions align="end">
+          <span class="news-tag">{{ item.tag }}</span>
+          <button mat-button color="primary">Leer circular</button>
+        </mat-card-actions>
+      </mat-card>
+    } @empty {
+      @if (!loading() && !error()) {
+        <p>Aún no hay noticias ni circulares disponibles.</p>
+      }
+    }
+  </div>
+</section>

@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>Nueva noticia o circular</h2>
+
+<mat-dialog-content class="announcement-form">
+  <mat-form-field appearance="outline">
+    <mat-label>Título</mat-label>
+    <input matInput maxlength="120" [ngModel]="title()" (ngModelChange)="title.set($event)" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Tipo</mat-label>
+    <select matNativeControl [ngModel]="tag()" (ngModelChange)="tag.set($event)">
+      <option value="Cabildo">Cabildo</option>
+      <option value="Cultos">Cultos</option>
+      <option value="Obra Social">Obra Social</option>
+      <option value="Aviso">Aviso</option>
+    </select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Contenido</mat-label>
+    <textarea matInput rows="5" maxlength="1000" [ngModel]="summary()" (ngModelChange)="summary.set($event)"></textarea>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-flat-button color="primary" [disabled]="!canSubmit()" (click)="submit()">
+    <mat-icon>campaign</mat-icon>
+    Publicar anuncio
+  </button>
+</mat-dialog-actions>
