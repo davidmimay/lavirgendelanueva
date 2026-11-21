@@ -1,0 +1,50 @@
+<h2 mat-dialog-title>Nueva propuesta</h2>
+
+<mat-dialog-content class="proposal-form">
+  <mat-form-field appearance="outline">
+    <mat-label>Título</mat-label>
+    <input matInput maxlength="120" [ngModel]="title()" (ngModelChange)="title.set($event)" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Descripción</mat-label>
+    <textarea matInput rows="3" maxlength="1000" [ngModel]="description()" (ngModelChange)="description.set($event)"></textarea>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Fecha de cierre</mat-label>
+    <input matInput type="date" [ngModel]="closingDate()" (ngModelChange)="closingDate.set($event)" />
+  </mat-form-field>
+
+  <div class="proposal-options">
+    <h3>Opciones</h3>
+    @for (option of optionLabels(); track $index; let index = $index) {
+      <div class="proposal-option-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Opción {{ index + 1 }}</mat-label>
+          <input matInput maxlength="160" [ngModel]="option" (ngModelChange)="updateOption(index, $event)" />
+        </mat-form-field>
+        <button
+          mat-icon-button
+          type="button"
+          [attr.aria-label]="'Eliminar opción ' + (index + 1)"
+          [disabled]="optionLabels().length <= 2"
+          (click)="removeOption(index)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    }
+    <button mat-button type="button" [disabled]="optionLabels().length >= 8" (click)="addOption()">
+      <mat-icon>add</mat-icon>
+      Añadir opción
+    </button>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-flat-button color="primary" [disabled]="!canSubmit()" (click)="submit()">
+    <mat-icon>add_circle</mat-icon>
+    Crear propuesta
+  </button>
+</mat-dialog-actions>

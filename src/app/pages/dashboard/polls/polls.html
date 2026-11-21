@@ -1,0 +1,103 @@
+<section class="dashboard-section">
+  <div class="section-heading">
+    <mat-icon color="primary">how_to_vote</mat-icon>
+    <h2>Votaciones y Consultas</h2>
+    @if (canManage()) {
+      <button
+        mat-icon-button
+        color="primary"
+        aria-label="Crear propuesta"
+        title="Crear propuesta"
+        (click)="openProposalDialog()">
+        <mat-icon>add</mat-icon>
+      </button>
+    }
+  </div>
+
+  @if (loading()) {
+    <p role="status">Cargando propuestas...</p>
+  }
+  @if (error(); as message) {
+    <p role="alert">{{ message }}</p>
+  }
+  @if (voteError(); as message) {
+    <p role="alert">{{ message }}</p>
+  }
+  @if (roleLoading()) {
+    <p role="status">Comprobando permisos...</p>
+  }
+  @if (roleError(); as message) {
+    <p role="alert">{{ message }}</p>
+  }
+  @if (createError(); as message) {
+    <p role="alert">{{ message }}</p>
+  }
+  @if (createSuccess(); as message) {
+    <p role="status">{{ message }}</p>
+  }
+  @if (creating()) {
+    <p role="status">Creando propuesta...</p>
+  }
+
+  <div class="cards-stack">
+    @for (poll of polls(); track poll.id) {
+      <mat-card appearance="outlined" class="poll-card">
+        <mat-card-header>
+          <mat-card-title>{{ poll.title }}</mat-card-title>
+          <mat-card-subtitle>
+            Cierre: {{ poll.closingDate }} • {{ getTotalVotes(poll) }} votos emitidos
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content class="poll-body">
+          <p class="poll-desc">{{ poll.description }}</p>
+
+          @if (!poll.hasVoted) {
+            <mat-radio-group [(ngModel)]="poll.selectedOptionId" class="options-group">
+              @for (option of poll.options; track option.id) {
+                <mat-radio-button [value]="option.id" color="primary">
+                  {{ option.label }}
+                </mat-radio-button>
+              }
+            </mat-radio-group>
+          } @else {
+            <div class="results-list">
+              @for (option of poll.options; track option.id) {
+                @let percentage = getPercentage(option.votes, getTotalVotes(poll));
+                <div class="result-item" [class.user-choice]="option.id === poll.selectedOptionId">
+                  <div class="result-header">
+                    <span>
+                      {{ option.label }}
+                      @if (option.id === poll.selectedOptionId) {
+                        <mat-icon class="voted-check" title="Tu voto">check_circle</mat-icon>
+                      }
+                    </span>
+                    <strong>{{ percentage }}% ({{ option.votes }})</strong>
+                  </div>
+                  <mat-progress-bar mode="determinate" [value]="percentage"></mat-progress-bar>
+                </div>
+              }
+            </div>
+          }
+        </mat-card-content>
+
+        @if (!poll.hasVoted) {
+          <mat-card-actions align="end">
+            <button
+              mat-flat-button
+              color="primary"
+              [disabled]="!poll.selectedOptionId || poll.submittingVote"
+              (click)="submitVote(poll.id)">
+              <mat-icon>send</mat-icon>
+              {{ poll.submittingVote ? 'Guardando...' : 'Emitir voto' }}
+            </button>
+          </mat-card-actions>
+        }
+      </mat-card>
+    } @empty {
+      @if (!loading() && !error()) {
+        <p>Aún no hay propuestas disponibles.</p>
+      }
+    }
+  </div>
+</section>
