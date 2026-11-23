@@ -1,0 +1,22 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isMuseumAdmin() {
+      return request.auth != null
+        && firestore.exists(/databases/(default)/documents/users/$(request.auth.uid))
+        && firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role
+          in ['admin', 'administrator', 'administrador'];
+    }
+
+    match /museum/{imageId} {
+      allow read: if true;
+      allow create: if isMuseumAdmin()
+        && request.resource.size <= 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+      allow delete: if isMuseumAdmin()
+        && !firestore.exists(/databases/(default)/documents/museum/$(imageId));
+      allow update: if false;
+    }
+  }
+}

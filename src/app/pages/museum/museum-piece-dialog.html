@@ -1,0 +1,57 @@
+<h2 mat-dialog-title>Añadir pieza al museo</h2>
+
+<mat-dialog-content class="piece-form">
+  <mat-form-field appearance="outline">
+    <mat-label>Título</mat-label>
+    <input matInput maxlength="120" [ngModel]="title()" (ngModelChange)="title.set($event)" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Subtítulo o materiales</mat-label>
+    <input matInput maxlength="160" [ngModel]="subtitle()" (ngModelChange)="subtitle.set($event)" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Categoría</mat-label>
+    <select matNativeControl [ngModel]="category()" (ngModelChange)="selectCategory($event)">
+      <option value="Orfebrería">Orfebrería</option>
+      <option value="Textil">Textil</option>
+      <option value="Escultura">Escultura</option>
+      <option value="Documento">Documento</option>
+    </select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Año o época</mat-label>
+    <input matInput maxlength="80" [ngModel]="year()" (ngModelChange)="year.set($event)" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Patrón o autor (opcional)</mat-label>
+    <input matInput maxlength="120" [ngModel]="patron()" (ngModelChange)="patron.set($event)" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Descripción</mat-label>
+    <textarea matInput rows="4" maxlength="1500" [ngModel]="description()" (ngModelChange)="description.set($event)"></textarea>
+  </mat-form-field>
+
+  <label class="image-field">
+    <span>Fotografía opcional (máximo 5 MB)</span>
+    <input type="file" accept="image/*" (change)="selectImage($event)" />
+  </label>
+  @if (image(); as selectedImage) {
+    <p class="selected-image"><mat-icon>image</mat-icon>{{ selectedImage.name }}</p>
+  }
+  @if (imageError(); as error) {
+    <p class="field-error" role="alert">{{ error }}</p>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-flat-button color="primary" [disabled]="!canSubmit()" (click)="submit()">
+    <mat-icon>add</mat-icon>
+    Añadir pieza
+  </button>
+</mat-dialog-actions>

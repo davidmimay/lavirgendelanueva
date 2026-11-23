@@ -112,6 +112,65 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    match /museum/{pieceId} {
+      allow read: if true;
+      allow create: if request.auth != null
+        && exists(userPath(request.auth.uid))
+        && get(userPath(request.auth.uid)).data.role
+          in ['admin', 'administrator', 'administrador']
+        && request.resource.data.keys().hasAll([
+          'title',
+          'subtitle',
+          'category',
+          'year',
+          'patron',
+          'imageUrl',
+          'imagePath',
+          'description',
+          'createdAt',
+          'createdBy'
+        ])
+        && request.resource.data.keys().hasOnly([
+          'title',
+          'subtitle',
+          'category',
+          'year',
+          'patron',
+          'imageUrl',
+          'imagePath',
+          'description',
+          'createdAt',
+          'createdBy'
+        ])
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0
+        && request.resource.data.title.size() <= 120
+        && request.resource.data.subtitle is string
+        && request.resource.data.subtitle.size() > 0
+        && request.resource.data.subtitle.size() <= 160
+        && request.resource.data.category in ['Orfebrería', 'Textil', 'Escultura', 'Documento']
+        && request.resource.data.year is string
+        && request.resource.data.year.size() > 0
+        && request.resource.data.year.size() <= 80
+        && request.resource.data.patron is string
+        && request.resource.data.patron.size() <= 120
+        && request.resource.data.imageUrl is string
+        && request.resource.data.imagePath is string
+        && (
+          (request.resource.data.imageUrl == '' && request.resource.data.imagePath == '')
+          || (
+            request.resource.data.imageUrl.size() <= 2048
+            && request.resource.data.imagePath == 'museum/' + pieceId
+          )
+        )
+        && request.resource.data.description is string
+        && request.resource.data.description.size() > 0
+        && request.resource.data.description.size() <= 1500
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.createdBy == request.auth.uid;
+      allow update, delete: if false;
+    }
+
     match /proposals/{proposalId} {
       allow read: if true;
       allow create: if canManageProposals()
