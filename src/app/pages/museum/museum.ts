@@ -25,26 +25,32 @@ import { AuthService } from '../../core/auth';
 import { firestoreDb, firebaseStorage } from '../../core/firebase.config';
 import { MuseumPieceDialog, MuseumPieceDraft } from './museum-piece-dialog';
 
-export type MuseumCategory = 'Orfebrería' | 'Textil' | 'Escultura' | 'Documento';
+export interface MuseumCategory {
+  id: string;
+  name: {
+    en: string;
+    es: string;
+  };
+}
 
 export interface MuseumPiece {
   id: string;
   title: string;
   subtitle: string;
-  category: MuseumCategory;
+  category: string;
   year: string;
   patron?: string;
   imageUrl: string;
   description: string;
 }
 
-function isMuseumCategory(value: string): value is MuseumCategory {
-  return value === 'Orfebrería' || value === 'Textil' || value === 'Escultura' || value === 'Documento';
-}
-
 function isAdminRole(role: unknown): boolean {
   return typeof role === 'string'
     && ['admin', 'administrator', 'administrador'].includes(role.toLowerCase());
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
 @Component({
@@ -67,7 +73,9 @@ export class Museum {
   private readonly destroyRef = inject(DestroyRef);
 
   readonly selectedCategory = signal<string>('Todas');
-  readonly categories = ['Todas', 'Orfebrería', 'Textil', 'Escultura', 'Documento'];
+  readonly categories = signal<MuseumCategory[]>([]);
+  readonly categoriesLoading = signal(true);
+  readonly categoriesError = signal<string | null>(null);
   readonly pieces = signal<MuseumPiece[]>([]);
   readonly loading = signal(true);
   readonly error = signal<string | null>(null);
@@ -105,7 +113,6 @@ export class Museum {
             typeof title !== 'string' ||
             typeof subtitle !== 'string' ||
             typeof category !== 'string' ||
-            !isMuseumCategory(category) ||
             typeof year !== 'string' ||
             typeof imageUrl !== 'string' ||
             typeof description !== 'string'
@@ -140,9 +147,41 @@ export class Museum {
       }
     );
 
+    const categoriesUnsubscribe = onSnapshot(
+      collection(firestoreDb, 'categories'),
+      snapshot => {
+        let hasInvalidCategory = false;
+        const categories = snapshot.docs.flatMap(document => {
+          const name = document.data()['name'];
+          if (
+            !isRecord(name) ||
+            typeof name['en'] !== 'string' ||
+            typeof name['es'] !== 'string'
+          ) {
+            console.error(`La categoría ${document.id} tiene un campo "name" no válido.`);
+            hasInvalidCategory = true;
+            return [];
+          }
+          return [{ id: document.id, name: { en: name['en'], es: name['es'] } }];
+        });
+
+        this.categories.set(categories);
+        this.categoriesLoading.set(false);
+        this.categoriesError.set(hasInvalidCategory
+          ? 'Algunas categorías no se muestran porque sus nombres no son válidos.'
+          : null);
+      },
+      cause => {
+        console.error('Error al cargar las categorías del museo:', cause);
+        this.categoriesLoading.set(false);
+        this.categoriesError.set('No se pudieron cargar las categorías del museo.');
+      }
+    );
+
     effect(() => this.syncRoleSubscription(this.authService.currentUser()));
     this.destroyRef.onDestroy(() => {
       piecesUnsubscribe();
+      categoriesUnsubscribe();
       this.roleUnsubscribe?.();
     });
   }
@@ -156,10 +195,15 @@ export class Museum {
     this.createSuccess.set(null);
     this.dialog.open(MuseumPieceDialog, {
       width: 'min(640px, 95vw)',
-      maxWidth: '95vw'
+      maxWidth: '95vw',
+      data: this.categories()
     }).afterClosed().subscribe(draft => {
       if (draft) void this.createPiece(draft);
     });
+  }
+
+  categoryName(categoryId: string): string {
+    return this.categories().find(category => category.id === categoryId)?.name.es ?? categoryId;
   }
 
   private async createPiece(draft: MuseumPieceDraft): Promise<void> {

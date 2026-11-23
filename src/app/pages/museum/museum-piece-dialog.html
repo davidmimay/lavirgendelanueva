@@ -13,11 +13,10 @@
 
   <mat-form-field appearance="outline">
     <mat-label>Categoría</mat-label>
-    <select matNativeControl [ngModel]="category()" (ngModelChange)="selectCategory($event)">
-      <option value="Orfebrería">Orfebrería</option>
-      <option value="Textil">Textil</option>
-      <option value="Escultura">Escultura</option>
-      <option value="Documento">Documento</option>
+    <select matNativeControl [ngModel]="category()" (ngModelChange)="category.set($event)">
+      @for (category of categories; track category.id) {
+        <option [value]="category.id">{{ category.name.es }}</option>
+      }
     </select>
   </mat-form-field>
 

@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -10,15 +10,11 @@ import type { MuseumCategory } from './museum';
 export interface MuseumPieceDraft {
   title: string;
   subtitle: string;
-  category: MuseumCategory;
+  category: string;
   year: string;
   patron: string;
   description: string;
   image: File | null;
-}
-
-function isMuseumCategory(value: string): value is MuseumCategory {
-  return value === 'Orfebrería' || value === 'Textil' || value === 'Escultura' || value === 'Documento';
 }
 
 @Component({
@@ -37,19 +33,16 @@ function isMuseumCategory(value: string): value is MuseumCategory {
 })
 export class MuseumPieceDialog {
   private readonly dialogRef = inject(MatDialogRef<MuseumPieceDialog, MuseumPieceDraft>);
+  readonly categories = inject<MuseumCategory[]>(MAT_DIALOG_DATA);
 
   readonly title = signal('');
   readonly subtitle = signal('');
-  readonly category = signal<MuseumCategory>('Documento');
+  readonly category = signal(this.categories[0]?.id ?? '');
   readonly year = signal('');
   readonly patron = signal('');
   readonly description = signal('');
   readonly image = signal<File | null>(null);
   readonly imageError = signal<string | null>(null);
-
-  selectCategory(value: string): void {
-    if (isMuseumCategory(value)) this.category.set(value);
-  }
 
   selectImage(event: Event): void {
     const input = event.target;
@@ -77,11 +70,11 @@ export class MuseumPieceDialog {
       && !!this.subtitle().trim()
       && !!this.year().trim()
       && !!this.description().trim()
+      && this.categories.some(category => category.id === this.category())
       && !this.imageError();
   }
 
   submit(): void {
-    const image = this.image();
     if (!this.canSubmit()) return;
 
     this.dialogRef.close({
@@ -91,7 +84,7 @@ export class MuseumPieceDialog {
       year: this.year().trim(),
       patron: this.patron().trim(),
       description: this.description().trim(),
-      image
+      image: this.image()
     });
   }
 }

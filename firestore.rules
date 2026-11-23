@@ -118,6 +118,8 @@ service cloud.firestore {
         && exists(userPath(request.auth.uid))
         && get(userPath(request.auth.uid)).data.role
           in ['admin', 'administrator', 'administrador']
+        && request.resource.data.category is string
+        && exists(/databases/$(database)/documents/categories/$(request.resource.data.category))
         && request.resource.data.keys().hasAll([
           'title',
           'subtitle',
@@ -148,7 +150,6 @@ service cloud.firestore {
         && request.resource.data.subtitle is string
         && request.resource.data.subtitle.size() > 0
         && request.resource.data.subtitle.size() <= 160
-        && request.resource.data.category in ['Orfebrería', 'Textil', 'Escultura', 'Documento']
         && request.resource.data.year is string
         && request.resource.data.year.size() > 0
         && request.resource.data.year.size() <= 80
@@ -169,6 +170,11 @@ service cloud.firestore {
         && request.resource.data.createdAt == request.time
         && request.resource.data.createdBy == request.auth.uid;
       allow update, delete: if false;
+    }
+
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if false;
     }
 
     match /proposals/{proposalId} {

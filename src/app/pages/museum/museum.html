@@ -14,7 +14,7 @@
           color="primary"
           aria-label="Añadir pieza al museo"
           title="Añadir pieza al museo"
-          [disabled]="creatingPiece()"
+          [disabled]="creatingPiece() || categoriesLoading() || categories().length === 0"
           (click)="openCreateDialog()">
           <mat-icon>add</mat-icon>
         </button>
@@ -45,6 +45,9 @@
   @if (error(); as message) {
     <p role="alert">{{ message }}</p>
   }
+  @if (categoriesError(); as message) {
+    <p role="alert">{{ message }}</p>
+  }
   @if (createError(); as message) {
     <p role="alert">{{ message }}</p>
   }
@@ -60,11 +63,18 @@
   <!-- Filtros por Sala / Categoría -->
   <nav class="filter-bar" aria-label="Filtrar piezas por categoría">
     <mat-chip-listbox [value]="selectedCategory()" (change)="selectCategory($event.value || 'Todas')">
-      @for (cat of categories; track cat) {
-        <mat-chip-option [value]="cat">{{ cat }}</mat-chip-option>
+      <mat-chip-option value="Todas">Todas</mat-chip-option>
+      @for (category of categories(); track category.id) {
+        <mat-chip-option [value]="category.id">{{ category.name.es }}</mat-chip-option>
       }
     </mat-chip-listbox>
   </nav>
+  @if (categoriesLoading()) {
+    <p role="status">Cargando categorías...</p>
+  }
+  @if (!categoriesLoading() && !categoriesError() && categories().length === 0) {
+    <p role="status">No hay categorías disponibles para clasificar piezas.</p>
+  }
 
   @if (loading()) {
     <p role="status">Cargando piezas del museo...</p>
@@ -96,7 +106,7 @@
         </mat-card-content>
 
         <mat-card-actions align="end">
-          <span class="category-tag">{{ piece.category }}</span>
+          <span class="category-tag">{{ categoryName(piece.category) }}</span>
           <button mat-button color="primary">
             <mat-icon>visibility</mat-icon>
             Ver ficha
