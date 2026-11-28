@@ -18,5 +18,15 @@ service firebase.storage {
         && !firestore.exists(/databases/(default)/documents/museum/$(imageId));
       allow update: if false;
     }
+
+    match /prayers/{prayerId} {
+      allow read: if true;
+      allow create: if isMuseumAdmin()
+        && request.resource.size <= 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+      allow delete: if isMuseumAdmin()
+        && !firestore.exists(/databases/(default)/documents/prayers/$(prayerId));
+      allow update: if false;
+    }
   }
 }

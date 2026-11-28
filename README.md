@@ -64,6 +64,6 @@ $ npm install firebase // No need for @angular/fire
 ## Dev
 
 $ npm start
-$ firebase deploy --only firestore:rules,storage --project lavirgendelanueva
+firebase deploy --only firestore:rules,storage --project lavirgendelanueva
 
 ## Material symbols & icons

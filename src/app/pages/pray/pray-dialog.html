@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>Añadir oración</h2>
+
+<mat-dialog-content class="prayer-form">
+  <mat-form-field appearance="outline">
+    <mat-label>Título</mat-label>
+    <input matInput maxlength="120" [ngModel]="title()" (ngModelChange)="title.set($event)" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Oración</mat-label>
+    <textarea matInput rows="7" maxlength="10000" [ngModel]="content()" (ngModelChange)="content.set($event)"></textarea>
+  </mat-form-field>
+
+  <label class="image-field">
+    <span>Imagen (opcional, máximo 5 MB)</span>
+    <input type="file" accept="image/*" (change)="selectImage($event)" />
+  </label>
+  @if (image(); as selectedImage) {
+    <p class="selected-image"><mat-icon>image</mat-icon>{{ selectedImage.name }}</p>
+  }
+  @if (imageError(); as error) {
+    <p class="field-error" role="alert">{{ error }}</p>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-flat-button color="primary" [disabled]="!canSubmit()" (click)="submit()">
+    <mat-icon>add</mat-icon>
+    Añadir oración
+  </button>
+</mat-dialog-actions>
