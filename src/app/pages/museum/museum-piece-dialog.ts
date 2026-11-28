@@ -11,10 +11,10 @@ export interface MuseumPieceDraft {
   title: string;
   subtitle: string;
   category: string;
-  year: string;
+  year: number;
   patron: string;
   description: string;
-  image: File | null;
+  image: File;
 }
 
 @Component({
@@ -38,7 +38,7 @@ export class MuseumPieceDialog {
   readonly title = signal('');
   readonly subtitle = signal('');
   readonly category = signal(this.categories[0]?.id ?? '');
-  readonly year = signal('');
+  readonly year = signal<number | null>(null);
   readonly patron = signal('');
   readonly description = signal('');
   readonly image = signal<File | null>(null);
@@ -66,25 +66,32 @@ export class MuseumPieceDialog {
   }
 
   canSubmit(): boolean {
+    const year = this.year();
     return !!this.title().trim()
       && !!this.subtitle().trim()
-      && !!this.year().trim()
+      // && year !== null
+      // && Number.isFinite(year)
       && !!this.description().trim()
       && this.categories.some(category => category.id === this.category())
+      && !!this.image()
       && !this.imageError();
   }
 
   submit(): void {
-    if (!this.canSubmit()) return;
+    // const image = this.image();
+    //const year = this.year();
+    // if (!this.canSubmit() || !image || year === null) return;
 
     this.dialogRef.close({
       title: this.title().trim(),
       subtitle: this.subtitle().trim(),
       category: this.category(),
-      year: this.year().trim(),
+      // year,
+      year: this.year(),
       patron: this.patron().trim(),
       description: this.description().trim(),
       image: this.image()
+      // image
     });
   }
 }

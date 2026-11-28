@@ -21,8 +21,8 @@
   </mat-form-field>
 
   <mat-form-field appearance="outline">
-    <mat-label>Año o época</mat-label>
-    <input matInput maxlength="80" [ngModel]="year()" (ngModelChange)="year.set($event)" />
+    <mat-label>Año</mat-label>
+    <input matInput type="number" step="1" required [ngModel]="year()" (ngModelChange)="year.set($event)" />
   </mat-form-field>
 
   <mat-form-field appearance="outline">
@@ -36,8 +36,8 @@
   </mat-form-field>
 
   <label class="image-field">
-    <span>Fotografía opcional (máximo 5 MB)</span>
-    <input type="file" accept="image/*" (change)="selectImage($event)" />
+    <span>Fotografía (obligatoria, máximo 5 MB)</span>
+    <input type="file" accept="image/*" required (change)="selectImage($event)" />
   </label>
   @if (image(); as selectedImage) {
     <p class="selected-image"><mat-icon>image</mat-icon>{{ selectedImage.name }}</p>

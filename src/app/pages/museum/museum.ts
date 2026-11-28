@@ -38,7 +38,7 @@ export interface MuseumPiece {
   title: string;
   subtitle: string;
   category: string;
-  year: string;
+  year: number;
   patron?: string;
   imageUrl: string;
   description: string;
@@ -113,7 +113,7 @@ export class Museum {
             typeof title !== 'string' ||
             typeof subtitle !== 'string' ||
             typeof category !== 'string' ||
-            typeof year !== 'string' ||
+            typeof year !== 'number' || !Number.isFinite(year) ||
             typeof imageUrl !== 'string' ||
             typeof description !== 'string'
           ) {
@@ -121,6 +121,27 @@ export class Museum {
             hasInvalidPiece = true;
             return [];
           }
+
+          if (
+  typeof title !== 'string' ||
+  typeof subtitle !== 'string' ||
+  typeof category !== 'string' ||
+  typeof year !== 'number' ||
+  !Number.isFinite(year) ||
+  typeof imageUrl !== 'string' ||
+  typeof description !== 'string'
+) {
+  console.error(`Pieza inválida (${document.id}):`, {
+    title: [typeof title, title],
+    subtitle: [typeof subtitle, subtitle],
+    category: [typeof category, category],
+    year: [typeof year, year],
+    imageUrl: [typeof imageUrl, imageUrl],
+    description: [typeof description, description],
+  });
+  hasInvalidPiece = true;
+  return [];
+}
 
           return [{
             id: document.id,
@@ -214,19 +235,17 @@ export class Museum {
     this.createError.set(null);
     this.createSuccess.set(null);
     let uploadedImage: StorageReference | undefined;
+    let failedStep = 'la subida de la fotografía a Storage';
 
     try {
       const pieceRef = doc(collection(firestoreDb, 'museum'));
-      let imageUrl = '';
-      let imagePath = '';
-      if (draft.image) {
-        const imageRef = ref(firebaseStorage, `museum/${pieceRef.id}`);
-        const upload = await uploadBytes(imageRef, draft.image, { contentType: draft.image.type });
-        uploadedImage = upload.ref;
-        imageUrl = await getDownloadURL(uploadedImage);
-        imagePath = uploadedImage.fullPath;
-      }
+      const imageRef = ref(firebaseStorage, `museum/${pieceRef.id}`);
+      const upload = await uploadBytes(imageRef, draft.image, { contentType: draft.image.type });
+      uploadedImage = upload.ref;
+      failedStep = 'la obtención de la URL de la fotografía';
+      const imageUrl = await getDownloadURL(uploadedImage);
 
+      failedStep = 'el guardado de la pieza en Firestore';
       await setDoc(pieceRef, {
         title: draft.title,
         subtitle: draft.subtitle,
@@ -234,7 +253,7 @@ export class Museum {
         year: draft.year,
         patron: draft.patron,
         imageUrl,
-        imagePath,
+        imagePath: uploadedImage.fullPath,
         description: draft.description,
         createdAt: serverTimestamp(),
         createdBy: user.uid
@@ -242,7 +261,7 @@ export class Museum {
 
       this.createSuccess.set('La pieza se añadió al museo correctamente.');
     } catch (cause) {
-      console.error('Error al añadir la pieza al museo:', cause);
+      console.error(`Error durante ${failedStep}:`, cause);
       if (uploadedImage) {
         try {
           await deleteObject(uploadedImage);
@@ -251,7 +270,9 @@ export class Museum {
         }
       }
       this.createError.set(cause instanceof FirebaseError && cause.code === 'permission-denied'
-        ? 'Firebase rechazó la operación. Comprueba que las reglas de Firestore y Storage estén desplegadas y que tu usuario tenga rol admin.'
+        ? failedStep.includes('Firestore')
+          ? 'Firestore rechazó el guardado. Comprueba que las reglas estén desplegadas, que tu usuario tenga rol admin y que la categoría seleccionada exista en "categories".'
+          : 'Storage rechazó la fotografía. Comprueba que storage.rules esté desplegado, que tu usuario tenga rol admin y que el archivo sea una imagen de hasta 5 MB.'
         : 'No se pudo añadir la pieza. Comprueba la conexión e inténtalo de nuevo.');
     } finally {
       this.creatingPiece.set(false);

@@ -25,6 +25,14 @@ service cloud.firestore {
           in ['admin', 'administrator', 'administrador', 'president', 'presidente'];
     }
 
+    function isMuseumAdmin() {
+      return request.auth != null
+        && exists(userPath(request.auth.uid))
+        && get(userPath(request.auth.uid)).data.role is string
+        && get(userPath(request.auth.uid)).data.role.lower()
+          in ['admin', 'administrator', 'administrador'];
+    }
+
     function validProposalVoteUpdate(proposalId, optionId) {
       let proposal = get(/databases/$(database)/documents/proposals/$(proposalId)).data;
       let updatedProposal = getAfter(/databases/$(database)/documents/proposals/$(proposalId)).data;
@@ -114,10 +122,7 @@ service cloud.firestore {
 
     match /museum/{pieceId} {
       allow read: if true;
-      allow create: if request.auth != null
-        && exists(userPath(request.auth.uid))
-        && get(userPath(request.auth.uid)).data.role
-          in ['admin', 'administrator', 'administrador']
+      allow create: if isMuseumAdmin()
         && request.resource.data.category is string
         && exists(/databases/$(database)/documents/categories/$(request.resource.data.category))
         && request.resource.data.keys().hasAll([
@@ -150,20 +155,14 @@ service cloud.firestore {
         && request.resource.data.subtitle is string
         && request.resource.data.subtitle.size() > 0
         && request.resource.data.subtitle.size() <= 160
-        && request.resource.data.year is string
-        && request.resource.data.year.size() > 0
-        && request.resource.data.year.size() <= 80
+        && request.resource.data.year is number
         && request.resource.data.patron is string
         && request.resource.data.patron.size() <= 120
         && request.resource.data.imageUrl is string
+        && request.resource.data.imageUrl.size() > 0
+        && request.resource.data.imageUrl.size() <= 2048
         && request.resource.data.imagePath is string
-        && (
-          (request.resource.data.imageUrl == '' && request.resource.data.imagePath == '')
-          || (
-            request.resource.data.imageUrl.size() <= 2048
-            && request.resource.data.imagePath == 'museum/' + pieceId
-          )
-        )
+        && request.resource.data.imagePath == 'museum/' + pieceId
         && request.resource.data.description is string
         && request.resource.data.description.size() > 0
         && request.resource.data.description.size() <= 1500
